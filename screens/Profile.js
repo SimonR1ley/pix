@@ -117,9 +117,10 @@ const Profile = () => {
           padding: 5,
           paddingTop: 10,
         }}
+        // numColumns={6}
         contentContainerStyle={{
-          flexDirection: "row",
           flexWrap: "wrap",
+          flexDirection: "row",
           justifyContent: "start",
           gap: 5,
         }}

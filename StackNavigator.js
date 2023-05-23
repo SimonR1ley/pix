@@ -16,11 +16,11 @@ const StackNavigator = () => {
     <Stack.Navigator
       screenOptions={{ headerShown: false, gestureEnabled: false }}
     >
-      <Stack.Screen name="Feed" component={Feed} />
-      <Stack.Screen name="Press" component={Press} />
+      <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Post" component={Post} />
-      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Feed" component={Feed} />
+      <Stack.Screen name="Press" component={Press} />
       <Stack.Screen name="Individual" component={Individual} />
       <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>

@@ -1,14 +1,46 @@
-import { View, Text, Image, TextInput, Button } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ButtonBlue } from "../components/ButtonBlue";
 
 import { useNavigation } from "@react-navigation/native";
 
+import { useState } from "react";
+
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../config/firebase";
+import { registerNewUser } from "../sevices/firebaseAuth";
+
 const Signup = () => {
   const navigation = useNavigation();
+
+  const [loading, setLoading] = useState(false);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+
+  const registerUser = () => {
+    console.log("Registering");
+    registerNewUser(username, email, password).then(() => {
+      navigation.navigate("Login");
+    });
+  };
+
+  // console.log(auth.currentUser.email);
+
   return (
     <SafeAreaView>
+      {/* {!loading ? ( */}
       <View style={{ width: "100%", height: "25%", marginBottom: 20 }}>
         <View
           style={{
@@ -48,34 +80,26 @@ const Signup = () => {
             backgroundColor: "#2A2D2E",
             borderRadius: 10,
             textAlign: "center",
-          }}
-          placeholder="Name"
-          placeholderTextColor="white"
-        />
-
-        <TextInput
-          style={{
-            width: "90%",
-            height: 50,
-            backgroundColor: "#2A2D2E",
-            borderRadius: 10,
-            textAlign: "center",
-          }}
-          placeholder="Surname"
-          placeholderTextColor="white"
-        />
-
-        <TextInput
-          style={{
-            width: "90%",
-            height: 50,
-            backgroundColor: "#2A2D2E",
-            borderRadius: 10,
-            textAlign: "center",
+            color: "white",
           }}
           placeholder="Username"
           placeholderTextColor="white"
+          onChangeText={(newText) => setUsername(newText)}
         />
+
+        {/* <TextInput
+          style={{
+            width: "90%",
+            height: 50,
+            backgroundColor: "#2A2D2E",
+            borderRadius: 10,
+            textAlign: "center",
+            color: "white",
+          }}
+          placeholder="Surname"
+          placeholderTextColor="white"
+          // onChangeText={(newText) => setSurname(newText)}
+        /> */}
 
         <TextInput
           style={{
@@ -84,18 +108,37 @@ const Signup = () => {
             backgroundColor: "#2A2D2E",
             borderRadius: 10,
             textAlign: "center",
+            color: "white",
+          }}
+          placeholder="Email Address"
+          placeholderTextColor="white"
+          onChangeText={(newText) => setEmail(newText)}
+        />
+
+        <TextInput
+          // secureTextEntry={true}
+          style={{
+            width: "90%",
+            height: 50,
+            backgroundColor: "#2A2D2E",
+            borderRadius: 10,
+            textAlign: "center",
+            color: "white",
           }}
           placeholder="Password"
           placeholderTextColor="white"
+          onChangeText={(newText) => setPassword(newText)}
         />
 
         <TextInput
+          // secureTextEntry={true}
           style={{
             width: "90%",
             height: 50,
             backgroundColor: "#2A2D2E",
             borderRadius: 10,
             textAlign: "center",
+            color: "white",
           }}
           placeholder="Confirm Password"
           placeholderTextColor="white"
@@ -103,7 +146,26 @@ const Signup = () => {
       </View>
 
       <View style={{ width: "100%", height: "20%" }}>
-        <ButtonBlue buttonText="Signup" />
+        {/* <ButtonBlue buttonText="Signup" /> */}
+
+        <TouchableOpacity
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            width: 180,
+            height: 50,
+            backgroundColor: "#37B4FB",
+            borderRadius: 10,
+            alignSelf: "center",
+            marginTop: 20,
+            marginBottom: 30,
+          }}
+          onPress={registerUser}
+        >
+          <Text style={{ color: "white", fontWeight: "700", fontSize: 17 }}>
+            Signup
+          </Text>
+        </TouchableOpacity>
 
         <Button
           title="Already have an account"
@@ -115,6 +177,19 @@ const Signup = () => {
           onPress={() => navigation.navigate("Login")}
         />
       </View>
+
+      {/* //   <View
+      //     style={{
+      //       width: "100%",
+      //       height: "100%",
+      //       justifyContent: "center",
+      //       alignItems: "center",
+      //     }}
+      //   >
+      //     <Text style={{ color: "black", textAlign: "center" }}>Loading</Text>
+      //     <ActivityIndicator animating={loading} size={40} />
+      //   </View>
+      // )} */}
     </SafeAreaView>
   );
 };

@@ -5,13 +5,76 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  ActivityIndicator,
+  Button,
 } from "react-native";
 import React from "react";
 import Nav from "../components/Nav";
 import { useNavigation } from "@react-navigation/native";
 
+import * as ImagePicker from "expo-image-picker";
+import { useState } from "react";
+
 const Post = () => {
   const navigation = useNavigation();
+  const [uploading, setUploading] = useState(false);
+  const [image, setImage] = useState(null);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    } else {
+      setImage(null);
+    }
+  };
+
+  const uploadImage = async () => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function () {
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", image, true);
+      xhr.send(null);
+    });
+    const ref = firebase.storage().ref().child(`Pictures/Image1`);
+    const snapshot = ref.put(blob);
+    snapshot.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      () => {
+        setUploading(true);
+      },
+      (error) => {
+        setUploading(false);
+        console.log(error);
+        blob.close();
+        return;
+      },
+      () => {
+        snapshot.snapshot.ref.getDownloadURL().then((url) => {
+          setUploading(false);
+          console.log("Download URL: ", url);
+          setImage(url);
+          blob.close();
+          return url;
+        });
+      }
+    );
+  };
+
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F2F2" }}>
       <View
@@ -92,23 +155,46 @@ const Post = () => {
         >
           <TouchableOpacity
             style={{
-              width: "50%",
-              height: "50%",
+              width: "100%",
+              height: "100%",
               // backgroundColor: "black",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => navigation.navigate("Feed")}
+            // onPress={() => navigation.navigate("Feed")}
+            onPress={pickImage}
           >
-            <Image
+            {/* <Image
               style={{
                 width: "60%",
                 height: "60%",
                 // backgroundColor: "green",
               }}
               source={require("../assets/add_story.png")}
-            />
+            /> */}
+
+            {image !== null ? (
+              <Image
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: 30,
+                  // backgroundColor: "green",
+                }}
+                source={{ uri: image }}
+              />
+            ) : (
+              <Image
+                style={{
+                  width: "30%",
+                  height: "30%",
+
+                  // backgroundColor: "green",
+                }}
+                source={require("../assets/add_story.png")}
+              />
+            )}
           </TouchableOpacity>
         </View>
 
@@ -126,21 +212,25 @@ const Post = () => {
           placeholderTextColor="white"
         />
 
-        <TouchableOpacity
-          title="View"
-          style={{
-            width: "50%",
-            height: 40,
-            backgroundColor: "#37B4FB",
-            borderRadius: 10,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: 20,
-          }}
-        >
-          <Text style={{ color: "white" }}>Upload</Text>
-        </TouchableOpacity>
+        {!uploading && image ? (
+          <TouchableOpacity
+            title="View"
+            style={{
+              width: "50%",
+              height: 40,
+              backgroundColor: "#37B4FB",
+              borderRadius: 10,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 20,
+            }}
+            onPress={uploadImage}
+          >
+            <Text style={{ color: "white" }}>Upload</Text>
+          </TouchableOpacity>
+        ) : // <ActivityIndicator size={"small"} color="black" />
+        null}
       </View>
 
       <Nav />
