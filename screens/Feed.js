@@ -7,15 +7,30 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import React from "react";
 import CardPost from "../components/CardPost";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Nav from "../components/Nav";
 import { useNavigation } from "@react-navigation/native";
+import { getAllProjectsFromCollection } from "../sevices/firebaseDb";
 
-const Feed = () => {
-  const navigation = useNavigation();
+const Feed = ({ navigation }) => {
+  const [projects, setProjects] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getAllProjects = async () => {
+    setRefreshing(true);
+    console.log("Getting Data...");
+    const allProjects = await getAllProjectsFromCollection();
+    setProjects(allProjects);
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
+    getAllProjects();
+  }, []);
 
   const [profileInfo, setProfileinfo] = useState([
     {
@@ -84,20 +99,40 @@ const Feed = () => {
             textAlign: "right",
           }}
         >
-          $1000
+          My Balence: $1000
         </Text>
       </View>
 
-      <FlatList
-        style={{ width: "100%" }}
-        horizontal
+      {/* <FlatList
+        style={{ width: "100%", height: "75%" }}
+        // horizontal
         showsHorizontalScrollIndicator={false}
-        data={profileInfo}
-        renderItem={({ item }) => (
-          <CardPost name={item.name} image={item.image} time={item.time} />
-        )}
-        keyExtractor={(item) => item.key.toString()}
-      />
+        data={projects}
+        renderItem={(item) => <CardPost data={item} />}
+        // keyExtractor={(item) => item.key.toString()}
+      /> */}
+
+      <View style={{ height: "80%" }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={getAllProjects}
+            />
+          }
+        >
+          {projects.map((project, index) => (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              key={index}
+              // onPress={() => navigation.push("Details", { project })}
+            >
+              <CardPost data={project} />
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
       <Image
         style={{

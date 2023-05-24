@@ -6,15 +6,17 @@ import {
 } from "firebase/auth";
 import { auth } from "../config/firebase";
 import { Alert } from "react-native";
+import { createUserInDb } from "./firebaseDb";
 
 export const registerNewUser = async (username, email, password) => {
   await createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+    .then(async (userCredential) => {
       // Signed in
       const user = userCredential.user;
       console.log("New User: " + user);
       updateAuthProfile(username);
-      // ...
+
+      await createUserInDb(username, email, user.uid);
     })
     .catch((error) => {
       const errorCode = error.code;

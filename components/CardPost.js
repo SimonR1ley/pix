@@ -2,9 +2,12 @@ import { View, Text, Button, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
-const CardPost = ({ image, name, time }) => {
+const CardPost = ({ data }) => {
   const navigation = useNavigation();
   iconimage = require("../assets/entries.png");
+
+  console.log(data.imageTitle);
+
   return (
     <View
       style={{
@@ -24,12 +27,28 @@ const CardPost = ({ image, name, time }) => {
         margin: 10,
       }}
     >
-      <Text style={{ marginBottom: 10, fontSize: 25, fontWeight: "800" }}>
-        {name}
+      <Text
+        style={{
+          marginBottom: 10,
+          fontSize: 25,
+          fontWeight: "800",
+          color: "black",
+        }}
+      >
+        {data.imageTitle}
       </Text>
-      <Text style={{ marginBottom: 10, fontSize: 18, fontWeight: "800" }}>
-        {time}
+      <Text
+        style={{
+          marginBottom: 10,
+          fontSize: 15,
+          color: "black",
+        }}
+      >
+        Owned By: {data.owner}
       </Text>
+      <Text
+        style={{ marginBottom: 10, fontSize: 18, fontWeight: "800" }}
+      ></Text>
       <Image
         style={{
           width: "90%",
@@ -37,7 +56,7 @@ const CardPost = ({ image, name, time }) => {
           backgroundColor: "grey",
           borderRadius: 30,
         }}
-        source={image}
+        source={data.image}
       />
       <View
         style={{

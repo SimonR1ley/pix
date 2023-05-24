@@ -29,9 +29,11 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
 
-  const registerUser = () => {
+  const registerUser = async () => {
     console.log("Registering");
-    registerNewUser(username, email, password).then(() => {
+    setLoading(true);
+    await registerNewUser(username, email, password).then(() => {
+      setLoading(false);
       navigation.navigate("Login");
     });
   };
@@ -40,54 +42,55 @@ const Signup = () => {
 
   return (
     <SafeAreaView>
-      {/* {!loading ? ( */}
-      <View style={{ width: "100%", height: "25%", marginBottom: 20 }}>
-        <View
-          style={{
-            width: 160,
-            height: 165,
-            alignSelf: "center",
-            justifyContent: "center",
-            marginTop: 30,
-          }}
-        >
-          <Image
+      {!loading ? (
+        <>
+          <View style={{ width: "100%", height: "25%", marginBottom: 20 }}>
+            <View
+              style={{
+                width: 160,
+                height: 165,
+                alignSelf: "center",
+                justifyContent: "center",
+                marginTop: 30,
+              }}
+            >
+              <Image
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  // backgroundColor: "green",
+                }}
+                source={require("../assets/logo.png")}
+              />
+            </View>
+          </View>
+
+          <View
             style={{
-              width: "100%",
-              height: "100%",
-              // backgroundColor: "green",
+              width: "98%",
+              height: "50%",
+              alignSelf: "center",
+              alignItems: "center",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-evenly",
             }}
-            source={require("../assets/logo.png")}
-          />
-        </View>
-      </View>
+          >
+            <TextInput
+              style={{
+                width: "90%",
+                height: 50,
+                backgroundColor: "#2A2D2E",
+                borderRadius: 10,
+                textAlign: "center",
+                color: "white",
+              }}
+              placeholder="Username"
+              placeholderTextColor="white"
+              onChangeText={(newText) => setUsername(newText)}
+            />
 
-      <View
-        style={{
-          width: "98%",
-          height: "50%",
-          alignSelf: "center",
-          alignItems: "center",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-evenly",
-        }}
-      >
-        <TextInput
-          style={{
-            width: "90%",
-            height: 50,
-            backgroundColor: "#2A2D2E",
-            borderRadius: 10,
-            textAlign: "center",
-            color: "white",
-          }}
-          placeholder="Username"
-          placeholderTextColor="white"
-          onChangeText={(newText) => setUsername(newText)}
-        />
-
-        {/* <TextInput
+            {/* <TextInput
           style={{
             width: "90%",
             height: 50,
@@ -101,95 +104,96 @@ const Signup = () => {
           // onChangeText={(newText) => setSurname(newText)}
         /> */}
 
-        <TextInput
-          style={{
-            width: "90%",
-            height: 50,
-            backgroundColor: "#2A2D2E",
-            borderRadius: 10,
-            textAlign: "center",
-            color: "white",
-          }}
-          placeholder="Email Address"
-          placeholderTextColor="white"
-          onChangeText={(newText) => setEmail(newText)}
-        />
+            <TextInput
+              style={{
+                width: "90%",
+                height: 50,
+                backgroundColor: "#2A2D2E",
+                borderRadius: 10,
+                textAlign: "center",
+                color: "white",
+              }}
+              placeholder="Email Address"
+              placeholderTextColor="white"
+              onChangeText={(newText) => setEmail(newText)}
+            />
 
-        <TextInput
-          // secureTextEntry={true}
-          style={{
-            width: "90%",
-            height: 50,
-            backgroundColor: "#2A2D2E",
-            borderRadius: 10,
-            textAlign: "center",
-            color: "white",
-          }}
-          placeholder="Password"
-          placeholderTextColor="white"
-          onChangeText={(newText) => setPassword(newText)}
-        />
+            <TextInput
+              // secureTextEntry={true}
+              style={{
+                width: "90%",
+                height: 50,
+                backgroundColor: "#2A2D2E",
+                borderRadius: 10,
+                textAlign: "center",
+                color: "white",
+              }}
+              placeholder="Password"
+              placeholderTextColor="white"
+              onChangeText={(newText) => setPassword(newText)}
+            />
 
-        <TextInput
-          // secureTextEntry={true}
-          style={{
-            width: "90%",
-            height: 50,
-            backgroundColor: "#2A2D2E",
-            borderRadius: 10,
-            textAlign: "center",
-            color: "white",
-          }}
-          placeholder="Confirm Password"
-          placeholderTextColor="white"
-        />
-      </View>
+            <TextInput
+              // secureTextEntry={true}
+              style={{
+                width: "90%",
+                height: 50,
+                backgroundColor: "#2A2D2E",
+                borderRadius: 10,
+                textAlign: "center",
+                color: "white",
+              }}
+              placeholder="Confirm Password"
+              placeholderTextColor="white"
+            />
+          </View>
 
-      <View style={{ width: "100%", height: "20%" }}>
-        {/* <ButtonBlue buttonText="Signup" /> */}
+          <View style={{ width: "100%", height: "20%" }}>
+            {/* <ButtonBlue buttonText="Signup" /> */}
 
-        <TouchableOpacity
+            <TouchableOpacity
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                width: 180,
+                height: 50,
+                backgroundColor: "#37B4FB",
+                borderRadius: 10,
+                alignSelf: "center",
+                marginTop: 20,
+                marginBottom: 30,
+              }}
+              onPress={registerUser}
+            >
+              <Text style={{ color: "white", fontWeight: "700", fontSize: 17 }}>
+                Signup
+              </Text>
+            </TouchableOpacity>
+
+            <Button
+              title="Already have an account"
+              color="#979797"
+              style={{
+                width: 100,
+                height: 50,
+              }}
+              onPress={() => navigation.navigate("Login")}
+            />
+          </View>
+        </>
+      ) : (
+        <View
           style={{
-            alignItems: "center",
+            width: "100%",
+            height: "100%",
             justifyContent: "center",
-            width: 180,
-            height: 50,
-            backgroundColor: "#37B4FB",
-            borderRadius: 10,
-            alignSelf: "center",
-            marginTop: 20,
-            marginBottom: 30,
+            alignItems: "center",
           }}
-          onPress={registerUser}
         >
-          <Text style={{ color: "white", fontWeight: "700", fontSize: 17 }}>
-            Signup
-          </Text>
-        </TouchableOpacity>
-
-        <Button
-          title="Already have an account"
-          color="#979797"
-          style={{
-            width: 100,
-            height: 50,
-          }}
-          onPress={() => navigation.navigate("Login")}
-        />
-      </View>
-
-      {/* //   <View
-      //     style={{
-      //       width: "100%",
-      //       height: "100%",
-      //       justifyContent: "center",
-      //       alignItems: "center",
-      //     }}
-      //   >
-      //     <Text style={{ color: "black", textAlign: "center" }}>Loading</Text>
-      //     <ActivityIndicator animating={loading} size={40} />
-      //   </View>
-      // )} */}
+          <Text style={{ color: "black", textAlign: "center" }}>Loading</Text>
+          <ActivityIndicator animating={loading} size={40} />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
