@@ -8,6 +8,7 @@ import Individual from "./screens/Individual";
 import Post from "./screens/Post";
 import Profile from "./screens/Profile";
 import Press from "./screens/Press";
+import Competitors from "./screens/Competitors";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ const StackNavigator = () => {
       screenOptions={{ headerShown: false, gestureEnabled: false }}
     >
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Competitors" component={Competitors} />
       <Stack.Screen name="Feed" component={Feed} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Post" component={Post} />

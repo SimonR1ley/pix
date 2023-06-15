@@ -1,12 +1,65 @@
-import { View, Text, Button, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  Button,
+  TouchableOpacity,
+  Image,
+  Timestamp,
+} from "react-native";
+import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import {
+  addWinningsToUser,
+  enterCompetition,
+  removeArtworkFromDb,
+} from "../sevices/firebaseDb";
+import { getCurrentUser } from "../sevices/firebaseAuth";
+import { useState } from "react";
 
-const CardPost = ({ data }) => {
+const CardPost = ({ data, theEntries }) => {
+  const user = getCurrentUser();
+
+  const [artData, setArtData] = useState(data.id);
+
+  const [expired, setExpired] = useState(false);
+
+  const [entered, setEntered] = useState(false);
+
+  useEffect(() => {
+    theEntries.forEach((element) => {
+      if (element.email === user.email) {
+        setEntered(true);
+      } else {
+        setEntered(false);
+      }
+    });
+
+    getTime();
+  }, [entered]);
+
+  const isTimestampOver24HoursLater = (timestamp) => {
+    const twentyFourHoursInMilliseconds = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    const currentTimestamp = Date.now();
+    const targetTimestamp = Date.parse(timestamp);
+
+    const futureTimestamp = targetTimestamp + twentyFourHoursInMilliseconds;
+
+    console.log(currentTimestamp >= futureTimestamp);
+
+    if (currentTimestamp >= futureTimestamp) {
+      setExpired(true);
+    } else {
+      setExpired(false);
+    }
+    return currentTimestamp >= futureTimestamp;
+  };
+
+  const getTime = async () => {
+    isTimestampOver24HoursLater(data.uploadedAt);
+  };
+
   const navigation = useNavigation();
   iconimage = require("../assets/entries.png");
-
-  console.log(data.imageTitle);
 
   return (
     <View
@@ -46,17 +99,15 @@ const CardPost = ({ data }) => {
       >
         Owned By: {data.owner}
       </Text>
-      <Text
-        style={{ marginBottom: 10, fontSize: 18, fontWeight: "800" }}
-      ></Text>
+      <Text style={{ marginBottom: 5, fontSize: 18, fontWeight: "800" }}></Text>
       <Image
         style={{
           width: "90%",
-          height: "60%",
+          height: "70%",
           backgroundColor: "grey",
           borderRadius: 30,
         }}
-        source={data.image}
+        source={{ uri: data.image }}
       />
       <View
         style={{
@@ -70,68 +121,56 @@ const CardPost = ({ data }) => {
           marginTop: 10,
         }}
       >
-        <View
-          style={{
-            width: "40%",
-            height: "100%",
-            borderRadius: 8,
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            borderStyle: "solid",
-            borderWidth: "2px",
-            backgroundColor: "#37B4FB",
-            borderColor: "#37B4FB",
-          }}
-        >
-          <Text style={{ color: "white", fontWeight: "800" }}>$100</Text>
-        </View>
-
-        <View
-          style={{
-            width: "40%",
-            height: "100%",
-            borderRadius: 8,
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            borderStyle: "solid",
-            borderWidth: "2px",
-            backgroundColor: "white",
-            borderColor: "#37B4FB",
-          }}
-        >
-          <Image
-            source={require("../assets/entries.png")}
+        {entered === false ? (
+          <TouchableOpacity
             style={{
-              alignSelf: "center",
-              width: "15%",
-              height: "60%",
-              marginRight: 5,
+              width: "40%",
+              height: "100%",
+              borderRadius: 8,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              borderStyle: "solid",
+              borderWidth: "2px",
+              backgroundColor: "#37B4FB",
+              borderColor: "#37B4FB",
             }}
-          />
+            onPress={() => navigation.push("Press", { artData })}
+          >
+            <Text style={{ color: "white", fontWeight: "800" }}>Enter</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={{
+              width: "40%",
+              height: "100%",
+              borderRadius: 8,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              borderStyle: "solid",
+              backgroundColor: "#37B4FB",
+            }}
+            onPress={() => navigation.push("Competitors", { data, expired })}
+          >
+            <Image
+              source={require("../assets/entries.png")}
+              style={{
+                alignSelf: "center",
+                width: "12%",
+                height: "60%",
+                marginRight: 5,
+              }}
+            />
 
-          <Text style={{ color: "black", fontWeight: "800" }}>Tags</Text>
-        </View>
+            <Text style={{ color: "white", fontWeight: "400" }}>
+              Competitors
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
-      <TouchableOpacity
-        title="View"
-        style={{
-          width: "50%",
-          height: 40,
-          backgroundColor: "black",
-          borderRadius: 10,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 20,
-        }}
-        onPress={() => navigation.navigate("Press")}
-      >
-        <Text style={{ color: "white" }}>View</Text>
-      </TouchableOpacity>
     </View>
   );
 };

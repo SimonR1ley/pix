@@ -13,19 +13,34 @@ import React from "react";
 import CardPost from "../components/CardPost";
 import { useState, useEffect } from "react";
 import Nav from "../components/Nav";
-import { useNavigation } from "@react-navigation/native";
 import { getAllProjectsFromCollection } from "../sevices/firebaseDb";
+import { getCurrentUser } from "../sevices/firebaseAuth";
 
 const Feed = ({ navigation }) => {
   const [projects, setProjects] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
+  const [entered, setEntered] = useState(false);
+
+  const user = getCurrentUser();
+
+  iconimage = require("../assets/entries.png");
+
   const getAllProjects = async () => {
     setRefreshing(true);
-    console.log("Getting Data...");
+    // console.log("Getting Data...");
     const allProjects = await getAllProjectsFromCollection();
     setProjects(allProjects);
     setRefreshing(false);
+
+    projects.forEach((element) => {
+      element.entries.forEach((entry) => {
+        if (entry.email === user.email) {
+          // console.log("YES");
+          setEntered(true);
+        }
+      });
+    });
   };
 
   useEffect(() => {
@@ -68,29 +83,6 @@ const Feed = ({ navigation }) => {
           paddingRight: 20,
         }}
       >
-        {/* <TouchableOpacity
-          style={{
-            width: 50,
-            height: 50,
-            backgroundColor: "black",
-            borderRadius: 30,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingRight: 5,
-          }}
-          onPress={() => navigation.navigate("Profile")}
-        >
-          <Image
-            style={{
-              width: "60%",
-              height: "60%",
-              // backgroundColor: "green",
-            }}
-            source={require("../assets/return.png")}
-          />
-        </TouchableOpacity> */}
-
         <Text
           style={{
             fontSize: 20,
@@ -99,18 +91,10 @@ const Feed = ({ navigation }) => {
             textAlign: "right",
           }}
         >
-          My Balence: $1000
+          {/* My Balence: $1000 */}
+          Competitions
         </Text>
       </View>
-
-      {/* <FlatList
-        style={{ width: "100%", height: "75%" }}
-        // horizontal
-        showsHorizontalScrollIndicator={false}
-        data={projects}
-        renderItem={(item) => <CardPost data={item} />}
-        // keyExtractor={(item) => item.key.toString()}
-      /> */}
 
       <View style={{ height: "80%" }}>
         <ScrollView
@@ -123,23 +107,17 @@ const Feed = ({ navigation }) => {
           }
         >
           {projects.map((project, index) => (
-            <TouchableOpacity
-              activeOpacity={0.7}
-              key={index}
-              // onPress={() => navigation.push("Details", { project })}
-            >
-              <CardPost data={project} />
-            </TouchableOpacity>
+            <CardPost key={index} data={project} theEntries={project.entries} />
           ))}
         </ScrollView>
       </View>
 
       <Image
         style={{
-          width: 40,
+          width: 35,
           height: 10,
           alignSelf: "center",
-          marginTop: 10,
+          marginTop: 15,
         }}
         source={require("../assets/Slider.png")}
       />

@@ -7,11 +7,10 @@ import {
   TextInput,
   ActivityIndicator,
   Button,
+  Alert,
 } from "react-native";
 import React from "react";
 import Nav from "../components/Nav";
-import { useNavigation } from "@react-navigation/native";
-
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { addProjectToCollection } from "../sevices/firebaseDb";
@@ -23,38 +22,25 @@ const Post = ({ navigation }) => {
   const [imageTitle, setImageTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    console.log(result);
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    } else {
-      setImage(null);
-    }
-  };
+  const [cost, setCost] = useState(null);
 
   const [loading, setLoading] = useState(false);
 
   const createProject = async () => {
-    if (imageTitle && description && image) {
+    if (imageTitle && description && image && cost) {
       setLoading(true);
       var ownerInfo = getCurrentUser();
 
       var project = {
         imageTitle,
         description,
-        image,
         owner: ownerInfo.displayName,
         userId: ownerInfo.uid,
         uploadedAt: Date(),
+        cost,
+        image,
+        entries: [],
+        ownerEmail: ownerInfo.email,
       };
 
       const success = await addProjectToCollection(project);
@@ -72,43 +58,21 @@ const Post = ({ navigation }) => {
     }
   };
 
-  // const uploadImage = async () => {
-  //   const blob = await new Promise((resolve, reject) => {
-  //     const xhr = new XMLHttpRequest();
-  //     xhr.onload = function () {
-  //       resolve(xhr.response);
-  //     };
-  //     xhr.onerror = function () {
-  //       reject(new TypeError("Network request failed"));
-  //     };
-  //     xhr.responseType = "blob";
-  //     xhr.open("GET", image, true);
-  //     xhr.send(null);
-  //   });
-  //   const ref = firebase.storage().ref().child(`Pictures/Image1`);
-  //   const snapshot = ref.put(blob);
-  //   snapshot.on(
-  //     firebase.storage.TaskEvent.STATE_CHANGED,
-  //     () => {
-  //       setUploading(true);
-  //     },
-  //     (error) => {
-  //       setUploading(false);
-  //       console.log(error);
-  //       blob.close();
-  //       return;
-  //     },
-  //     () => {
-  //       snapshot.snapshot.ref.getDownloadURL().then((url) => {
-  //         setUploading(false);
-  //         console.log("Download URL: ", url);
-  //         setImage(url);
-  //         blob.close();
-  //         return url;
-  //       });
-  //     }
-  //   );
-  // };
+  const pickImageFromLibrary = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.7,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F2F2" }}>
@@ -117,7 +81,7 @@ const Post = ({ navigation }) => {
           width: "100%",
           height: 80,
           display: "flex",
-          justifyContent: "start",
+          justifyContent: "center",
           alignItems: "center",
           flexDirection: "row",
           paddingLeft: 20,
@@ -134,8 +98,12 @@ const Post = ({ navigation }) => {
             justifyContent: "center",
             alignItems: "center",
             paddingRight: 5,
+            position: "absolute",
+            left: 25,
           }}
-          onPress={() => navigation.navigate("Feed")}
+          onPress={() => {
+            navigation.navigate("Feed");
+          }}
         >
           <Image
             style={{
@@ -146,6 +114,15 @@ const Post = ({ navigation }) => {
             source={require("../assets/return.png")}
           />
         </TouchableOpacity>
+
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "700",
+          }}
+        >
+          Post Artwork
+        </Text>
       </View>
 
       {!loading ? (
@@ -199,7 +176,7 @@ const Post = ({ navigation }) => {
                 alignItems: "center",
               }}
               // onPress={() => navigation.navigate("Feed")}
-              onPress={pickImage}
+              onPress={pickImageFromLibrary}
             >
               {/* <Image
               style={{
@@ -236,7 +213,7 @@ const Post = ({ navigation }) => {
           <TextInput
             style={{
               width: "80%",
-              height: 40,
+              height: 80,
               backgroundColor: "#2A2D2E",
               borderRadius: 10,
               color: "white",
@@ -246,6 +223,20 @@ const Post = ({ navigation }) => {
             placeholder="Description"
             placeholderTextColor="white"
             onChangeText={(newText) => setDescription(newText)}
+          />
+          <TextInput
+            style={{
+              width: "50%",
+              height: 40,
+              backgroundColor: "#2A2D2E",
+              borderRadius: 10,
+              color: "white",
+              textAlign: "center",
+              marginTop: 20,
+            }}
+            placeholder="Cost of Image"
+            placeholderTextColor="white"
+            onChangeText={(newText) => setCost(newText)}
           />
           <TouchableOpacity
             title="View"

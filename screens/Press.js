@@ -4,41 +4,72 @@ import CountDown from "react-native-countdown-component";
 import Nav from "../components/Nav";
 import { useState, useEffect, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { getCurrentUser } from "../sevices/firebaseAuth";
+import { enterCompetition } from "../sevices/firebaseDb";
 
-const Press = () => {
+const Press = ({ route }) => {
+  const { artData } = route.params;
   const navigation = useNavigation();
 
-  const timer = useRef(null);
-  const [sec, setSec] = useState(0);
-  const [min, setMin] = useState(0);
-  const [hour, setHour] = useState(0);
+  console.log(artData);
 
   const [buttonDisplay, setButtonDisplay] = useState(true);
 
-  const addOne = () => {
-    setSec((prevValue) => prevValue + 1);
-    timer.current = setTimeout(addOne, 200);
+  const [counter, setCounter] = useState(0);
+  const [timeHeld, setTimeHeld] = useState(null);
+  const intervalRef = useRef(null);
+  const startTimeRef = useRef(null);
+
+  const [dbTime, setDbTime] = useState();
+
+  const formatTime = (time) => {
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
+    const seconds = time % 60;
+
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  if (sec > 60) {
-    setMin((prevValue) => prevValue + 1);
-    setSec(0);
-  }
+  const addOne = () => {
+    startTimeRef.current = Date.now();
+    intervalRef.current = setInterval(() => {
+      setCounter((prevCounter) => prevCounter + 1);
+    }, 1000); // Update counter every 1 second
 
-  if (min > 60) {
-    setHour((prevValue) => prevValue + 1);
-    setMin(0);
-  }
+    console.log(counter);
+  };
 
   const stopTimer = () => {
-    clearTimeout(timer.current);
-    // setButtonDisplay(false);
-    setTimeout(() => {
-      setSec(0);
-      setMin(0);
-      setHour(0);
+    clearInterval(intervalRef.current);
+    const endTime = Date.now();
+    const timeDifference = Math.floor((endTime - startTimeRef.current) / 1000); // in seconds
+    setTimeHeld(formatTime(timeDifference));
+    // setCounter(0);
+
+    setDbTime(counter);
+
+    compete();
+
+    setButtonDisplay(false);
+  };
+
+  const user = getCurrentUser();
+
+  var entry = {
+    competitorId: user.uid,
+    name: user.displayName,
+    email: user.email,
+    competitorTime: counter,
+    competitorTimeDisplay: formatTime(counter).toString(),
+  };
+
+  const compete = () => {
+    console.log(counter);
+    enterCompetition(entry, artData).then(() => {
       navigation.navigate("Feed");
-    }, 2000);
+    });
   };
 
   return (
@@ -75,10 +106,10 @@ const Press = () => {
             onPress={() => alert("hello")}
             size={20}
           /> */}
-            {hour > 9 ? null : 0}
+            {/* {hour > 9 ? null : 0}
             {hour.toString()}:{min > 9 ? null : 0}
-            {min.toString()}:{sec > 9 ? null : 0}
-            {sec.toString()}
+            {min.toString()}:{sec > 9 ? null : 0} */}
+            {formatTime(counter).toString()}
           </Text>
         </View>
 

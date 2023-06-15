@@ -1,10 +1,23 @@
-import { View, Text, Image, FlatList, TouchableOpacity } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Nav from "../components/Nav";
 import { useState } from "react";
+import { getCurrentUser } from "../sevices/firebaseAuth";
+import { getAllUsersFromCollection } from "../sevices/firebaseDb";
 
 const Profile = () => {
+  const user = getCurrentUser();
+
+  // console.log(user);
+
   const [profileInfo, setProfileinfo] = useState([
     {
       key: "1",
@@ -38,6 +51,28 @@ const Profile = () => {
     },
   ]);
 
+  const [winningInfo, setWinningInfo] = useState([]);
+
+  useEffect(() => {
+    getAllProjects();
+  }, []);
+
+  const getAllProjects = async () => {
+    try {
+      const theUsers = await getAllUsersFromCollection();
+
+      theUsers.forEach((element) => {
+        if (element.winnings && Array.isArray(element.winnings)) {
+          element.winnings.forEach((entry) => {
+            setWinningInfo((prevWinningInfo) => [...prevWinningInfo, entry]);
+          });
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -66,16 +101,16 @@ const Profile = () => {
       </View>
 
       <Text style={{ fontSize: 30, marginTop: 20, fontWeight: "800" }}>
-        Username
+        {user.displayName}
       </Text>
 
-      <Text style={{ fontSize: 20, marginTop: 10, color: "#979797" }}>
+      {/* <Text style={{ fontSize: 20, marginTop: 10, color: "#979797" }}>
         My Balance
       </Text>
 
       <Text style={{ fontSize: 20, marginTop: 10, fontWeight: "800" }}>
-        $1000
-      </Text>
+        ${user.balance}
+      </Text> */}
 
       <TouchableOpacity
         style={{
@@ -86,6 +121,7 @@ const Profile = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          borderRadius: 10,
         }}
       >
         <Text
@@ -108,7 +144,41 @@ const Profile = () => {
         }}
       ></View>
 
-      <FlatList
+      <ScrollView
+        style={{
+          width: "100%",
+          height: "53%",
+          // backgroundColor: "green",
+          marginTop: 20,
+          padding: 5,
+          paddingTop: 10,
+        }}
+      >
+        {winningInfo.map((project, index) => (
+          <View
+            key={index}
+            style={{
+              width: 100,
+              height: 100,
+              backgroundColor: "grey",
+              borderRadius: 20,
+            }}
+          >
+            {/* <Text>{project.imageTitle}</Text> */}
+            <Image
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: 20,
+              }}
+              source={{ uri: project.image }}
+              // source={project.image}
+            />
+          </View>
+        ))}
+      </ScrollView>
+
+      {/* <FlatList
         style={{
           width: "100%",
           height: "53%",
@@ -126,7 +196,7 @@ const Profile = () => {
         }}
         vertical={true}
         showsVerticalScrollIndicator={false}
-        data={profileInfo}
+        data={winningInfo}
         renderItem={({ item }) => (
           <View
             style={{
@@ -136,6 +206,7 @@ const Profile = () => {
               borderRadius: 20,
             }}
           >
+            <Text>{item.imageTitle}</Text>
             <Image
               style={{
                 width: "100%",
@@ -146,7 +217,7 @@ const Profile = () => {
             />
           </View>
         )}
-      />
+      /> */}
 
       <Nav />
     </SafeAreaView>
