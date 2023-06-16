@@ -32,12 +32,12 @@ export const signinUser = async (email, password) => {
       const user = userCredential.user;
       console.log("User logged in: " + user.email);
 
-      Alert.alert("You're in", "Successfully logged in", [
-        {
-          text: "Thank you",
-          onPress: () => {},
-        },
-      ]);
+      // Alert.alert("You're in", "Successfully logged in", [
+      //   {
+      //     text: "Thank you",
+      //     onPress: () => {},
+      //   },
+      // ]);
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -68,16 +68,19 @@ export const getCurrentUser = () => {
   return auth.currentUser;
 };
 
-const updateAuthProfile = (username) => {
+export const updateAuthProfile = (username, imageUrl = "") => {
   updateProfile(auth.currentUser, {
     displayName: username,
-    photoURL: "https://example.com/jane-q-user/profile.jpg",
+    photoURL: imageUrl,
   })
     .then(() => {
+      console.log("Profile updated in Auth Successfully");
+      return true;
       // Profile updated!
-      // ...
     })
     .catch((error) => {
+      console.log("Something went wrong in Update Auth" + error);
+      return false;
       // An error occurred
       // ...
     });

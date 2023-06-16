@@ -23,7 +23,6 @@ export const createUserInDb = async (username, email, uid) => {
       username,
       email,
       winnings: [],
-      balance: 500,
       createdAt: Timestamp.now(),
     });
     console.log("User Added doc id: " + docRef.id);
@@ -62,10 +61,7 @@ export const addProjectToCollection = async (project) => {
     const docRef = await addDoc(collection(db, "artworks"), project);
     console.log("Added artwork successfully", docRef.id);
     if (docRef.id) {
-      await uploadToStorage(
-        project.image,
-        `projects/${docRef.id}_${project.title}`
-      );
+      await uploadToStorage(project.image, `projects/${docRef.id}`);
       return true;
     } else {
       return false;
@@ -153,4 +149,12 @@ export const addWinningsToUser = async (userId, winningArtWork) => {
     .catch((error) => {
       console.error("Error updating winnings:", error);
     });
+};
+
+export const updateUserInDb = async (userInfo, uid) => {
+  try {
+    const docRef = await updateDoc(doc(db, "users", uid), userInfo);
+  } catch (e) {
+    console.log("Something went wrong with user update");
+  }
 };

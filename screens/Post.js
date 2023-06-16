@@ -27,7 +27,7 @@ const Post = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const createProject = async () => {
-    if (imageTitle && description && image && cost) {
+    if (imageTitle && description && image) {
       setLoading(true);
       var ownerInfo = getCurrentUser();
 
@@ -37,7 +37,6 @@ const Post = ({ navigation }) => {
         owner: ownerInfo.displayName,
         userId: ownerInfo.uid,
         uploadedAt: Date(),
-        cost,
         image,
         entries: [],
         ownerEmail: ownerInfo.email,
@@ -224,7 +223,7 @@ const Post = ({ navigation }) => {
             placeholderTextColor="white"
             onChangeText={(newText) => setDescription(newText)}
           />
-          <TextInput
+          {/* <TextInput
             style={{
               width: "50%",
               height: 40,
@@ -237,7 +236,7 @@ const Post = ({ navigation }) => {
             placeholder="Cost of Image"
             placeholderTextColor="white"
             onChangeText={(newText) => setCost(newText)}
-          />
+          /> */}
           <TouchableOpacity
             title="View"
             style={{

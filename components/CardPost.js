@@ -6,7 +6,7 @@ import {
   Image,
   Timestamp,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   addWinningsToUser,
@@ -15,9 +15,12 @@ import {
 } from "../sevices/firebaseDb";
 import { getCurrentUser } from "../sevices/firebaseAuth";
 import { useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 const CardPost = ({ data, theEntries }) => {
   const user = getCurrentUser();
+
+  // console.log(data);
 
   const [artData, setArtData] = useState(data.id);
 
@@ -25,38 +28,61 @@ const CardPost = ({ data, theEntries }) => {
 
   const [entered, setEntered] = useState(false);
 
+  const [timeLeft, setTimeLeft] = useState();
+
+  const [imgDesc, setImgDesc] = useState();
+
   useEffect(() => {
-    theEntries.forEach((element) => {
-      if (element.email === user.email) {
-        setEntered(true);
+    const hasEntered = () => {
+      const userEntered = data.entries.some((entry) => {
+        entry.competitorId === user.uid;
+        console.log(entry.competitorId + " " + user.uid);
+        return entry.competitorId === user.uid;
+      });
+      setEntered(userEntered);
+
+      console.log(entered);
+    };
+
+    const isTimestampOver24HoursLater = (timestamp) => {
+      const twentyFourHoursInMilliseconds = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+      const currentTimestamp = Date.now();
+      const targetTimestamp = Date.parse(timestamp);
+
+      const futureTimestamp = targetTimestamp + twentyFourHoursInMilliseconds;
+
+      // console.log(currentTimestamp >= futureTimestamp);
+
+      if (currentTimestamp >= futureTimestamp) {
+        setExpired(true);
       } else {
-        setEntered(false);
+        setExpired(false);
       }
-    });
+      return currentTimestamp >= futureTimestamp;
+    };
 
-    getTime();
-  }, [entered]);
+    const calculateTimeLeft = (targetTime) => {
+      const twentyFourHoursInMilliseconds = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+      const currentTimestamp = Date.now();
+      const targetTimestamp = Date.parse(targetTime);
 
-  const isTimestampOver24HoursLater = (timestamp) => {
-    const twentyFourHoursInMilliseconds = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-    const currentTimestamp = Date.now();
-    const targetTimestamp = Date.parse(timestamp);
+      const futureTimestamp = targetTimestamp + twentyFourHoursInMilliseconds;
 
-    const futureTimestamp = targetTimestamp + twentyFourHoursInMilliseconds;
+      const timeDifference = futureTimestamp - currentTimestamp;
+      const hoursLeft = Math.floor(timeDifference / (1000 * 60 * 60));
+      const minutesLeft = Math.floor((timeDifference / (1000 * 60)) % 60);
+      const secondsLeft = Math.floor((timeDifference / 1000) % 60);
 
-    console.log(currentTimestamp >= futureTimestamp);
+      const timeLeftString = `${hoursLeft} hours, ${minutesLeft} minutes, ${secondsLeft} seconds`;
+      console.log(timeLeftString);
+      setTimeLeft(timeLeftString);
+      return timeLeftString;
+    };
 
-    if (currentTimestamp >= futureTimestamp) {
-      setExpired(true);
-    } else {
-      setExpired(false);
-    }
-    return currentTimestamp >= futureTimestamp;
-  };
-
-  const getTime = async () => {
+    hasEntered();
+    calculateTimeLeft(data.uploadedAt);
     isTimestampOver24HoursLater(data.uploadedAt);
-  };
+  }, [data.entries, theEntries]);
 
   const navigation = useNavigation();
   iconimage = require("../assets/entries.png");
@@ -65,7 +91,7 @@ const CardPost = ({ data, theEntries }) => {
     <View
       style={{
         width: 410,
-        height: 600,
+        height: 620,
         backgroundColor: "white",
         alignSelf: "center",
         borderRadius: 30,
@@ -99,16 +125,49 @@ const CardPost = ({ data, theEntries }) => {
       >
         Owned By: {data.owner}
       </Text>
-      <Text style={{ marginBottom: 5, fontSize: 18, fontWeight: "800" }}></Text>
-      <Image
-        style={{
-          width: "90%",
-          height: "70%",
-          backgroundColor: "grey",
-          borderRadius: 30,
-        }}
-        source={{ uri: data.image }}
-      />
+      {/* <Text style={{ marginBottom: 5, fontSize: 18 }}>Time Left</Text> */}
+      {!imgDesc ? (
+        <TouchableOpacity
+          style={{
+            width: "90%",
+            height: "70%",
+            backgroundColor: "grey",
+            borderRadius: 30,
+          }}
+          onPress={() => setImgDesc(true)}
+          activeOpacity={0.9}
+        >
+          <Image
+            style={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "grey",
+              borderRadius: 30,
+            }}
+            source={{ uri: data.image }}
+          />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={{
+            width: "90%",
+            height: "70%",
+            backgroundColor: "grey",
+            borderRadius: 30,
+            backgroundColor: "white",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onPress={() => setImgDesc(false)}
+          activeOpacity={0.9}
+        >
+          <Text>{data.description}</Text>
+        </TouchableOpacity>
+      )}
+
+      <Text style={{ marginBottom: 5, marginTop: 15, fontSize: 14 }}>
+        {timeLeft}
+      </Text>
       <View
         style={{
           width: "80%",
@@ -121,7 +180,7 @@ const CardPost = ({ data, theEntries }) => {
           marginTop: 10,
         }}
       >
-        {entered === false ? (
+        {!entered ? (
           <TouchableOpacity
             style={{
               width: "40%",
@@ -143,7 +202,7 @@ const CardPost = ({ data, theEntries }) => {
         ) : (
           <TouchableOpacity
             style={{
-              width: "40%",
+              width: "50%",
               height: "100%",
               borderRadius: 8,
               display: "flex",

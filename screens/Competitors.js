@@ -19,6 +19,8 @@ const Competitors = ({ route, navigation }) => {
   const { data, expired } = route.params;
   console.log(expired);
 
+  console.log(data.image);
+
   let userWithMaxTime = null;
 
   useEffect(() => {
@@ -54,10 +56,10 @@ const Competitors = ({ route, navigation }) => {
     console.log("User with Max Time:", userWithMaxTime);
 
     if (expired === true) {
-      // if (maxCompetitorTime === 17) {
       console.log("Yes True from Competitors");
 
       var winningArtWork = {
+        winningUser: userWithMaxTime,
         imageTitle: data.imageTitle,
         image: data.image,
       };
@@ -105,9 +107,9 @@ const Competitors = ({ route, navigation }) => {
       </View>
 
       <ScrollView style={{ paddingTop: 10 }}>
-        {data.entries.map((item) => (
+        {data.entries.map((item, index) => (
           <View
-            //   key={}
+            key={index}
             style={{
               width: "95%",
               height: 50,
@@ -134,7 +136,7 @@ const Competitors = ({ route, navigation }) => {
                 justifyContent: "center",
               }}
             >
-              <Text style={{ fontSize: 17, fontWeight: "600", color: "white" }}>
+              <Text style={{ fontSize: 14, fontWeight: "600", color: "white" }}>
                 {item.competitorTimeDisplay}
               </Text>
             </View>

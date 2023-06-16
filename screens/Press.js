@@ -16,11 +16,11 @@ const Press = ({ route }) => {
   const [buttonDisplay, setButtonDisplay] = useState(true);
 
   const [counter, setCounter] = useState(0);
-  const [timeHeld, setTimeHeld] = useState(null);
+  // const [timeHeld, setTimeHeld] = useState(null);
   const intervalRef = useRef(null);
   const startTimeRef = useRef(null);
 
-  const [dbTime, setDbTime] = useState();
+  // const [dbTime, setDbTime] = useState();
 
   const formatTime = (time) => {
     const hours = Math.floor(time / 3600);
@@ -38,22 +38,26 @@ const Press = ({ route }) => {
       setCounter((prevCounter) => prevCounter + 1);
     }, 1000); // Update counter every 1 second
 
-    console.log(counter);
+    // console.log(counter);
   };
 
   const stopTimer = () => {
     clearInterval(intervalRef.current);
-    const endTime = Date.now();
-    const timeDifference = Math.floor((endTime - startTimeRef.current) / 1000); // in seconds
-    setTimeHeld(formatTime(timeDifference));
+    // const endTime = Date.now();
+    // const timeDifference = Math.floor((endTime - startTimeRef.current) / 1000); // in seconds
+    // setTimeHeld(formatTime(timeDifference));
     // setCounter(0);
 
-    setDbTime(counter);
+    // setDbTime(counter);
 
     compete();
 
     setButtonDisplay(false);
   };
+
+  // useEffect(() => {
+  //   compete();
+  // }, [buttonDisplay]);
 
   const user = getCurrentUser();
 

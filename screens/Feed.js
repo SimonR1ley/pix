@@ -11,10 +11,19 @@ import {
 } from "react-native";
 import React from "react";
 import CardPost from "../components/CardPost";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Nav from "../components/Nav";
 import { getAllProjectsFromCollection } from "../sevices/firebaseDb";
 import { getCurrentUser } from "../sevices/firebaseAuth";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
+import { db } from "../config/firebase";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Feed = ({ navigation }) => {
   const [projects, setProjects] = useState([]);
@@ -26,47 +35,41 @@ const Feed = ({ navigation }) => {
 
   iconimage = require("../assets/entries.png");
 
+  useFocusEffect(
+    useCallback(() => {
+      //get data when viewing the screen
+      // getAllProjects();
+
+      const q = query(collection(db, "artworks"));
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        console.log("Listening activated...");
+        const artworkData = [];
+        querySnapshot.forEach((doc) => {
+          artworkData.push({ ...doc.data(), id: doc.id });
+        });
+        // console.log("Current projects: ", artworkData);
+        setProjects(artworkData);
+      });
+
+      return () => {
+        //cleanup when not viewing the screen
+        console.log("Home Screen not in View...");
+        unsubscribe();
+      };
+    }, [])
+  );
+
   const getAllProjects = async () => {
     setRefreshing(true);
     // console.log("Getting Data...");
     const allProjects = await getAllProjectsFromCollection();
     setProjects(allProjects);
     setRefreshing(false);
-
-    projects.forEach((element) => {
-      element.entries.forEach((entry) => {
-        if (entry.email === user.email) {
-          // console.log("YES");
-          setEntered(true);
-        }
-      });
-    });
   };
 
   useEffect(() => {
     getAllProjects();
   }, []);
-
-  const [profileInfo, setProfileinfo] = useState([
-    {
-      key: "1",
-      name: "Image One",
-      time: 5,
-      image: require("../assets/two.png"),
-    },
-    {
-      key: "2",
-      name: "Image Two",
-      time: 8,
-      image: require("../assets/one.png"),
-    },
-    {
-      key: "3",
-      name: "Image Three",
-      time: 19,
-      image: require("../assets/three.jpg"),
-    },
-  ]);
 
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F2F2" }}>
@@ -96,7 +99,7 @@ const Feed = ({ navigation }) => {
         </Text>
       </View>
 
-      <View style={{ height: "80%" }}>
+      <View style={{ height: "83%" }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
@@ -112,7 +115,7 @@ const Feed = ({ navigation }) => {
         </ScrollView>
       </View>
 
-      <Image
+      {/* <Image
         style={{
           width: 35,
           height: 10,
@@ -120,7 +123,7 @@ const Feed = ({ navigation }) => {
           marginTop: 15,
         }}
         source={require("../assets/Slider.png")}
-      />
+      /> */}
 
       <Nav />
     </SafeAreaView>

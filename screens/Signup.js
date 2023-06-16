@@ -27,15 +27,36 @@ const Signup = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordCon, setPasswordCon] = useState("");
   const [username, setUsername] = useState("");
 
   const registerUser = async () => {
-    console.log("Registering");
-    setLoading(true);
-    await registerNewUser(username, email, password).then(() => {
-      setLoading(false);
-      navigation.navigate("Login");
-    });
+    if (password != passwordCon) {
+      Alert.alert("Try Again", "Passwords do not match.", [
+        {
+          text: "Try Again",
+          onPress: () => {
+            setLoading(false);
+          },
+        },
+      ]);
+    } else if (!email || !password || !username || !passwordCon) {
+      Alert.alert("Try Again", "please fill in all your information.", [
+        {
+          text: "Try Again",
+          onPress: () => {
+            setLoading(false);
+          },
+        },
+      ]);
+    } else {
+      console.log("Registering");
+      setLoading(true);
+      await registerNewUser(username, email, password).then(() => {
+        setLoading(false);
+        navigation.navigate("Login");
+      });
+    }
   };
 
   // console.log(auth.currentUser.email);
@@ -145,6 +166,7 @@ const Signup = () => {
               }}
               placeholder="Confirm Password"
               placeholderTextColor="white"
+              onChangeText={(newText) => setPasswordCon(newText)}
             />
           </View>
 
