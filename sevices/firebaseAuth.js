@@ -68,20 +68,34 @@ export const getCurrentUser = () => {
   return auth.currentUser;
 };
 
-export const updateAuthProfile = (username, imageUrl = "") => {
-  updateProfile(auth.currentUser, {
-    displayName: username,
-    photoURL: imageUrl,
-  })
-    .then(() => {
-      console.log("Profile updated in Auth Successfully");
-      return true;
-      // Profile updated!
-    })
-    .catch((error) => {
-      console.log("Something went wrong in Update Auth" + error);
-      return false;
-      // An error occurred
-      // ...
+// export const updateAuthProfile = (username, imageUrl = "") => {
+//   updateProfile(auth.currentUser, {
+//     displayName: username,
+//     photoURL: imageUrl,
+//   })
+//     .then(() => {
+//       console.log("Profile updated in Auth Successfully");
+//       return true;
+//       // Profile updated!
+//     })
+//     .catch((error) => {
+//       console.log("Something went wrong in Update Auth" + error);
+//       return false;
+//       // An error occurred
+//       // ...
+//     });
+// };
+
+export const updateAuthProfile = async (username, imageUrl = "") => {
+  try {
+    await updateProfile(auth.currentUser, {
+      displayName: username,
+      photoURL: imageUrl,
     });
+    console.log("Profile updated in Auth Successfully");
+    return true;
+  } catch (error) {
+    console.log("Something went wrong in Update Auth: " + error);
+    return false;
+  }
 };

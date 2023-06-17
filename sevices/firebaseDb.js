@@ -56,12 +56,31 @@ export const getAllUsersFromCollection = async () => {
 
 // Projects Collection
 
+// export const addProjectToCollection = async (project) => {
+//   try {
+//     const docRef = await addDoc(collection(db, "artworks"), project);
+//     console.log("Added artwork successfully", docRef.id);
+//     if (docRef.id) {
+//       await uploadToStorage(project.image, `projects/${docRef.id}`);
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   } catch (e) {
+//     console.log("Something went wrong: " + e);
+//   }
+// };
+
 export const addProjectToCollection = async (project) => {
   try {
     const docRef = await addDoc(collection(db, "artworks"), project);
     console.log("Added artwork successfully", docRef.id);
     if (docRef.id) {
-      await uploadToStorage(project.image, `projects/${docRef.id}`);
+      const imageURL = await uploadToStorage(
+        project.image,
+        `projects/${docRef.id}`
+      );
+      await updateDoc(docRef, { image: imageURL }); // Assuming the field name for the image URL is 'image'
       return true;
     } else {
       return false;
@@ -71,43 +90,43 @@ export const addProjectToCollection = async (project) => {
   }
 };
 
+// export const getAllProjectsFromCollection = async () => {
+//   try {
+//     var projects = [];
+
+//     const snapshot = await getDocs(
+//       query(
+//         collection(db, "artworks")
+//         // orderBy("year", "desc"),
+//         // orderBy("title")
+//       )
+//     );
+
+//     snapshot.forEach((doc) => {
+//       projects.push({ ...doc.data(), id: doc.id });
+//     });
+
+//     return projects;
+//   } catch (e) {
+//     console.log("Something went wrong: " + e);
+//     return [];
+//   }
+// };
+
 export const getAllProjectsFromCollection = async () => {
   try {
     var projects = [];
 
-    const snapshot = await getDocs(
-      query(
-        collection(db, "artworks")
-        // orderBy("year", "desc"),
-        // orderBy("title")
-      )
-    );
+    const snapshot = await getDocs(collection(db, "artworks"));
 
     snapshot.forEach((doc) => {
-      projects.push({ ...doc.data(), id: doc.id });
-    });
-
-    return projects;
-  } catch (e) {
-    console.log("Something went wrong: " + e);
-    return [];
-  }
-};
-
-export const getCurrentUserProjects = async (userId) => {
-  try {
-    var projects = [];
-
-    const snapshot = await getDocs(
-      query(
-        collection(db, "projects"),
-        where("userId", "==", userId),
-        orderBy("year", "desc")
-      )
-    );
-
-    snapshot.forEach(async (doc) => {
-      projects.push({ ...doc.data(), id: doc.id });
+      const projectData = doc.data();
+      const project = {
+        ...projectData,
+        id: doc.id,
+        imageURL: projectData.image, // Assuming the field name for the image URL is 'image'
+      };
+      projects.push(project);
     });
 
     return projects;

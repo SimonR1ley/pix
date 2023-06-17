@@ -16,43 +16,59 @@ import { getAllUsersFromCollection } from "../sevices/firebaseDb";
 const Profile = ({ navigation }) => {
   const user = getCurrentUser();
 
-  // console.log(user.photoURL);
-
   const [winningInfo, setWinningInfo] = useState([]);
 
   useEffect(() => {
     getAllProjects();
   }, []);
 
+  // const getAllProjects = async () => {
+  //   try {
+  //     const theUsers = await getAllUsersFromCollection();
+
+  //     // console.log(theUsers);
+
+  //     const userWinningInfo = [];
+
+  //     theUsers.forEach((element) => {
+  //       if (element.winnings && Array.isArray(element.winnings)) {
+  //         element.winnings.forEach((entry) => {
+  //           // console.log(
+  //           //   "USER ID " + user.uid + " Winning User: " + entry.winningUser
+  //           // );
+
+  //           // console.log(entry.image);
+  //           if (entry.winningUser === user.uid) {
+  //             // console.log(
+  //             //   "USER ID " + user.uid + " Winning User: " + entry.winningUser
+  //             // );
+  //             userWinningInfo.push(entry);
+  //             // console.log(entry.image);
+  //           }
+  //         });
+  //       }
+  //     });
+
+  //     setWinningInfo(userWinningInfo);
+  //     // console.log(winningInfo); // Now this should log the winningInfo array
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   const getAllProjects = async () => {
     try {
       const theUsers = await getAllUsersFromCollection();
 
-      // console.log(theUsers);
-
-      const userWinningInfo = [];
-
-      theUsers.forEach((element) => {
-        if (element.winnings && Array.isArray(element.winnings)) {
-          element.winnings.forEach((entry) => {
-            // console.log(
-            //   "USER ID " + user.uid + " Winning User: " + entry.winningUser
-            // );
-
-            // console.log(entry.image);
-            if (entry.winningUser === user.uid) {
-              // console.log(
-              //   "USER ID " + user.uid + " Winning User: " + entry.winningUser
-              // );
-              userWinningInfo.push(entry);
-              // console.log(entry.image);
-            }
-          });
-        }
-      });
+      const userWinningInfo = theUsers
+        .filter(
+          (element) => element.winnings && Array.isArray(element.winnings)
+        )
+        .flatMap((element) =>
+          element.winnings.filter((entry) => entry.winningUser === user.uid)
+        );
 
       setWinningInfo(userWinningInfo);
-      // console.log(winningInfo); // Now this should log the winningInfo array
     } catch (error) {
       console.error(error);
     }
@@ -141,7 +157,6 @@ const Profile = ({ navigation }) => {
                 marginBottom: 20,
               }}
             >
-              {/* <Text>{project.imageTitle}</Text> */}
               <Image
                 style={{
                   width: "100%",
@@ -158,47 +173,6 @@ const Profile = ({ navigation }) => {
           </Text>
         )}
       </ScrollView>
-
-      {/* <FlatList
-        style={{
-          width: "100%",
-          height: "53%",
-          // backgroundColor: "green",
-          marginTop: 20,
-          padding: 5,
-          paddingTop: 10,
-        }}
-        // numColumns={6}
-        contentContainerStyle={{
-          flexWrap: "wrap",
-          flexDirection: "row",
-          justifyContent: "start",
-          gap: 5,
-        }}
-        vertical={true}
-        showsVerticalScrollIndicator={false}
-        data={winningInfo}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              width: 100,
-              height: 100,
-              backgroundColor: "grey",
-              borderRadius: 20,
-            }}
-          >
-            <Text>{item.imageTitle}</Text>
-            <Image
-              style={{
-                width: "100%",
-                height: "100%",
-                borderRadius: 20,
-              }}
-              source={item.image}
-            />
-          </View>
-        )}
-      /> */}
 
       <Nav />
     </SafeAreaView>

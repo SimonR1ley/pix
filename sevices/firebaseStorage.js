@@ -24,5 +24,9 @@ export const uploadToStorage = async (fileUri, refName) => {
 
   blob.close();
 
-  return getDownloadURL(uploadRef);
+  // return getDownloadURL(uploadRef);
+
+  const downloadURL = await getDownloadURL(uploadRef);
+
+  return downloadURL;
 };

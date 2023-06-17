@@ -28,32 +28,56 @@ const UserSettings = ({ navigation }) => {
 
   const [loading, setLoading] = useState(false);
 
-  const updateProfileInformation = async () => {
-    //update profile information
+  // const updateProfileInformation = async () => {
+  //   //update profile information
 
+  //   setLoading(true);
+
+  //   var uploadedImageUrl = null;
+
+  //   if (profileUrl != user.photoURL) {
+  //     const uploadedImageUrl = await uploadToStorage(
+  //       profileUrl,
+  //       `users/${user.uid}`
+  //     );
+  //   }
+
+  //   const authSuccess = updateAuthProfile(
+  //     username,
+  //     uploadedImageUrl ? uploadedImageUrl : profileUrl
+  //   );
+  //   await updateUserInDb(user.uid, {
+  //     username,
+  //     profileUrl: uploadedImageUrl ? uploadedImageUrl : profileUrl,
+  //     email,
+  //   }).then(() => {
+  //     setLoading(false);
+  //     navigation.navigate("Feed");
+  //   });
+  // };
+
+  const updateProfileInformation = async () => {
     setLoading(true);
 
-    var uploadedImageUrl = null;
+    let uploadedImageUrl = null;
 
-    if (profileUrl != user.photoURL) {
-      const uploadedImageUrl = await uploadToStorage(
-        profileUrl,
-        `users/${user.uid}`
-      );
+    if (profileUrl !== user.photoURL) {
+      uploadedImageUrl = await uploadToStorage(profileUrl, `users/${user.uid}`);
     }
 
-    const authSuccess = updateAuthProfile(
+    const authSuccess = await updateAuthProfile(
       username,
       uploadedImageUrl ? uploadedImageUrl : profileUrl
     );
+
     await updateUserInDb(user.uid, {
       username,
       profileUrl: uploadedImageUrl ? uploadedImageUrl : profileUrl,
       email,
-    }).then(() => {
-      setLoading(false);
-      navigation.navigate("Feed");
     });
+
+    setLoading(false);
+    navigation.navigate("Feed");
   };
 
   const pickImageFromLibrary = async () => {

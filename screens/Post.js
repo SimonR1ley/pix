@@ -26,6 +26,37 @@ const Post = ({ navigation }) => {
 
   const [loading, setLoading] = useState(false);
 
+  // const createProject = async () => {
+  //   if (imageTitle && description && image) {
+  //     setLoading(true);
+  //     var ownerInfo = getCurrentUser();
+
+  //     var project = {
+  //       imageTitle,
+  //       description,
+  //       owner: ownerInfo.displayName,
+  //       userId: ownerInfo.uid,
+  //       uploadedAt: Date(),
+  //       image,
+  //       entries: [],
+  //       ownerEmail: ownerInfo.email,
+  //     };
+
+  //     const success = await addProjectToCollection(project);
+  //     if (success) {
+  //       setLoading(false);
+  //       console.log("Added project Successfully");
+  //       navigation.goBack();
+  //     } else {
+  //       setLoading(false);
+  //       console.log("Opps... adding project went wrong");
+  //       Alert.alert("Oops", "adding project went wrong");
+  //     }
+  //   } else {
+  //     Alert.alert("Oops", "Please add all user information.");
+  //   }
+  // };
+
   const createProject = async () => {
     if (imageTitle && description && image) {
       setLoading(true);
@@ -37,9 +68,9 @@ const Post = ({ navigation }) => {
         owner: ownerInfo.displayName,
         userId: ownerInfo.uid,
         uploadedAt: Date(),
-        image,
         entries: [],
         ownerEmail: ownerInfo.email,
+        image, // Add the image URI to the project object
       };
 
       const success = await addProjectToCollection(project);
@@ -49,7 +80,7 @@ const Post = ({ navigation }) => {
         navigation.goBack();
       } else {
         setLoading(false);
-        console.log("Opps... adding project went wrong");
+        console.log("Oops... adding project went wrong");
         Alert.alert("Oops", "adding project went wrong");
       }
     } else {
