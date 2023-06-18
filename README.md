@@ -144,7 +144,7 @@ We were tasked with building a competition app, and I wanted to build something 
 
 ### Ideation
 
-![image5][image5]
+![image4][image4]
 <br>
 ![image6][image6]
 
