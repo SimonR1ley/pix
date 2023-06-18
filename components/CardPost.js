@@ -45,7 +45,7 @@ const CardPost = ({ data, theEntries }) => {
     };
 
     const isTimestampOver24HoursLater = (timestamp) => {
-      const twentyFourHoursInMilliseconds = 0 * 0 * 60 * 1000; // 24 hours in milliseconds
+      const twentyFourHoursInMilliseconds = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
       const currentTimestamp = Date.now();
       const targetTimestamp = Date.parse(timestamp);
 

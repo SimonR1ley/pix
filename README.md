@@ -3,10 +3,10 @@
 <!-- Repository Information & Links-->
 <br />
 
-![GitHub repo size](https://img.shields.io/github/repo-size/username/projectname?color=%000000)
-![GitHub watchers](https://img.shields.io/github/watchers/username/projectname?color=%000000)
-![GitHub language count](https://img.shields.io/github/languages/count/username/projectname?color=%000000)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/username/projectname?color=%000000)
+![GitHub repo size](https://img.shields.io/github/repo-size/SimonR1ley/pix?color=%000000)
+![GitHub watchers](https://img.shields.io/github/watchers/SimonR1ley/pix?color=%000000)
+![GitHub language count](https://img.shields.io/github/languages/count/SimonR1ley/pix?color=%000000)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/SimonR1ley/pix?color=%000000)
 [![LinkedIn][linkedin-shield]][linkedin-url]
 [![Instagram][instagram-shield]][instagram-url]
 [![Behance][behance-shield]][behance-url]
@@ -18,22 +18,22 @@
 </br>
 <p align="center">
 
-  <a href="https://github.com/username/projectname">
-    <img src="path/to/logo" alt="Logo" width="140" height="140">
+  <a href="https://github.com/SimonR1ley/pix">
+    <img src="mockups/logo.png" alt="Logo" width="140" height="140">
   </a>
   
   <h3 align="center">Pix</h3>
 
   <p align="center">
-    Short Project Slogan / Description <br>
-      <a href="https://github.com/username/projectname"><strong>Explore the docs »</strong></a>
+    Win Pixs, hold on to win! <br>
+      <a href="https://github.com/SimonR1ley/pix"><strong>Explore the docs »</strong></a>
    <br />
    <br />
    <a href="path/to/demonstration/video">View Demo</a>
     ·
-    <a href="https://github.com/username/projectname/issues">Report Bug</a>
+    <a href="https://github.com/SimonR1ley/pix/issues">Report Bug</a>
     ·
-    <a href="https://github.com/username/projectname/issues">Request Feature</a>
+    <a href="https://github.com/SimonR1ley/pix/issues">Request Feature</a>
 </p>
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
@@ -53,9 +53,6 @@
   - [Implementation Process](#implementation-process)
     - [Highlights](#highlights)
     - [Challenges](#challenges)
-  - [Reviews and Testing](#peer-reviews)
-    - [Feedback from Reviews](#feedback-from-reviews)
-    - [Unit Tests](#unit-tests)
   - [Future Implementation](#peer-reviews)
 - [Final Outcome](#final-outcome)
   - [Mockups](#mockups)
@@ -65,7 +62,6 @@
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
-- [Acknowledgements](#acknowledgements)
 
 <!--PROJECT DESCRIPTION-->
 
@@ -77,13 +73,12 @@
 
 ### Project Description
 
-A nice introduction to this amazing project of mine.
+Pix is a competition app that allows you to win picture you like by holding a button.
 
 ### Built With
 
-- [Technology Name](path/to/technology/website)
-- [Technology Name](path/to/technology/website)
-- [Technology Name](path/to/technology/website)
+- [React Navtive](path/to/technology/website)
+- [Firebase](path/to/technology/website)
 
 <!-- GETTING STARTED -->
 <!-- Make sure to add appropriate information about what prerequesite technologies the user would need and also the steps to install your project on their own mashines -->
@@ -102,37 +97,26 @@ Ensure that you have the latest version of [Software](path/to/where/they/can/dow
 
 Here are a couple of ways to clone this repo:
 
-1.  Software </br>
-    `Android Studio` -> `File` -> `New` -> `From Version Control` -> `Git`</br>
-    Enter `https://github.com/username/projectname.git` into the URL field and press the `Clone` button.
-
-2.  Clone Repository </br>
+1.  Clone Repository </br>
     Run the following in the command-line to clone the project:
 
     ```sh
-    git clone https://github.com/username/projectname.git
+    git clone https://github.com/SimonR1ley/pix.git
     ```
 
         Open `Software` and select `File | Open...` from the menu. Select cloned directory and press `Open` button
 
-3.  Install Dependencies </br>
+2.  Install Dependencies </br>
     Run the following in the command-line to install all the required dependencies:
 
     ```sh
     npm install
     ```
 
-4.  Get a free API Key at [https://example.com](https://example.com) and enter it in the `config.js` file:
-    ```js
-    const API_KEY = "ENTER YOUR API";
-    ```
-
 <!-- FEATURES AND FUNCTIONALITY-->
 <!-- You can add the links to all of your imagery at the bottom of the file as references -->
 
 ## Features and Functionality
-
-![image2][image2]
 
 ### Feature 1
 
@@ -157,7 +141,7 @@ Description of Feature
 
 ## Concept Process
 
-The `Conceptual Process` is the set of actions, activities and research that was done when starting this project.
+We were tasked with building a competition app, and I wanted to build something different. So I came up with the concept of holding for an image. I then started building the wireframes and playing around with the design.
 
 ### Ideation
 
@@ -177,55 +161,35 @@ The `Conceptual Process` is the set of actions, activities and research that was
 
 ## Development Process
 
-The `Development Process` is the technical implementations and functionality done in the frontend and backend of the application.
+I started with the design of the app, trying to get the screens as close to the mockups as I could. I then started with the navigation. I then got into the functionality of the app, database, and logic of the app.
 
 ### Implementation Process
 
 <!-- stipulate all of the functionality you included in the project -->
 
-- Made use of both `functionality` to implement a specific feature.
-- `MVC/MVVM` design architecture implemented.
-- `Plugin` for this.
-- ETC.
+- Signup and Login
+- Profile Settings Page, where users can change and update their profiles
+- Profile page, where users can see their winnings.
+- Competitions screen, to view images that could be won.
+- Press screen, the means of winning the image.
 
 #### Highlights
 
 <!-- stipulated the highlight you experienced with the project -->
 
-- Sunshine.
-- Rainbows.
+- I really enjoyed working on this app, I liked playing around with the idea and seeing it work.
 
 #### Challenges
 
 <!-- stipulated the challenges you faced with the project and why you think you faced it or how you think you'll solve it (if not solved) -->
 
-- Bugs.
-- Bugs.
-
-### Reviews & Testing
-
-<!-- stipulate how you've conducted testing in the form of peer reviews, feedback and also functionality testing, like unit tests (if applicable) -->
-
-#### Feedback from Reviews
-
-`Peer Reviews` were conducted by my fellow students and lecturer. The following feedback I found useful:
-
-- Feedback one.
-- Feedback two.
-
-#### Unit Tests
-
-`Unit Tests` were conducted to establish working functionality. Here are all the tests that were ran:
-
-- Test 1 of this functionality
-- Test 2 of this functionality
+- The main bug I had was that I could not see images posted by other devices. This was a simple fix, I just needed to adjust the rules in Firebase.
 
 ### Future Implementation
 
 <!-- stipulate functionality and improvements that can be implemented in the future. -->
 
-- Future 1.
-- Future 2.
+- I would like to add reporting functionality, so users can report duplicates of an image.
 
 <!-- MOCKUPS -->
 
@@ -249,7 +213,7 @@ To see a run through of the application, click below:
 
 ## Roadmap
 
-See the [open issues](https://github.com/username/projectname/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/SimonR1ley/pix/issues) for a list of proposed features (and known issues).
 
 <!-- CONTRIBUTING -->
 
@@ -267,7 +231,7 @@ Contributions are what makes the open-source community such an amazing place to 
 
 ## Authors
 
-- **Your Name & Surname** - [username](https://github.com/username)
+- **Simon Riley** - [SimonR1ley](https://github.com/SimonR1ley)
 
 <!-- LICENSE -->
 
@@ -279,33 +243,23 @@ Distributed under the MIT License. See `LICENSE` for more information.\
 
 ## Contact
 
-- **Your Name & Surname** - [email@address](mailto:email@address) - [@instagram_handle](https://www.instagram.com/instagram_handle/)
-- **Project Link** - https://github.com/username/projectname
+- **Your Name & Surname** - [170044@virtualwindow.co.za](mailto:email@address) - [@simonbrettriley](https://www.instagram.com/instagram_handle/)
+- **Project Link** - https://github.com/SimonR1ley/pix
 
 <!-- ACKNOWLEDGEMENTS -->
 
-## Acknowledgements
-
-<!-- all resources that you used and Acknowledgements here -->
-
-- [Resource Name](path/to/resource)
-- [Resource Name](path/to/resource)
-- [Resource Name](path/to/resource)
-- [Resource Name](path/to/resource)
-- [Resource Name](path/to/resource)
-
 <!-- MARKDOWN LINKS & IMAGES -->
 
-[image1]: /path/to/image.png
-[image2]: /path/to/image.png
-[image3]: /path/to/image.png
-[image4]: /path/to/image.png
-[image5]: /path/to/image.png
-[image6]: /path/to/image.png
-[image7]: /path/to/image.png
-[image8]: /path/to/image.png
-[image9]: /path/to/image.png
-[image10]: /path/to/image.png
+[image1]: mockups/login.png
+[image2]: mockups/press.png
+[image3]: mockups/post.png
+[image4]: mockups/winnings.png
+[image5]: mockups/wireframes/Confirmation.png
+[image6]: mockups/wireframes/Confirmation.png
+[image7]: mockups/wireframes/Confirmation.png
+[image8]: mockups/wireframes/Confirmation.png
+[image9]: mockups/wireframes/Confirmation.png
+[image10]: mockups/wireframes/Confirmation.png
 
 <!-- Refer to https://shields.io/ for more information and options about the shield links at the top of the ReadMe file -->
 
