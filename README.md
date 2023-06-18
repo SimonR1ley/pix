@@ -254,12 +254,12 @@ Distributed under the MIT License. See `LICENSE` for more information.\
 [image2]: mockups/press.png
 [image3]: mockups/post.png
 [image4]: mockups/winnings.png
-[image5]: mockups/wireframes/Confirmation.png
-[image6]: mockups/wireframes/Confirmation.png
-[image7]: mockups/wireframes/Confirmation.png
-[image8]: mockups/wireframes/Confirmation.png
-[image9]: mockups/wireframes/Confirmation.png
-[image10]: mockups/wireframes/Confirmation.png
+[image5]: mockups/wireframes/Login.png
+[image6]: mockups/wireframes/Login.png
+[image7]: mockups/wireframes/Login.png
+[image8]: mockups/wireframes/Login.png
+[image9]: mockups/wireframes/Login.png
+[image10]: mockups/wireframes/Login.png
 
 <!-- Refer to https://shields.io/ for more information and options about the shield links at the top of the ReadMe file -->
 
