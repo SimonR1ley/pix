@@ -48,7 +48,6 @@
 - [Concept Process](#concept-process)
   - [Ideation](#ideation)
   - [Wireframes](#wireframes)
-  - [User-flow](#user-flow)
 - [Development Process](#development-process)
   - [Implementation Process](#implementation-process)
     - [Highlights](#highlights)
@@ -120,19 +119,19 @@ Here are a couple of ways to clone this repo:
 
 ### Feature 1
 
-Description of Feature
+Post Screen
 
 ![image3][image3]
 
 ### Feature 2
 
-Description of Feature
+Profile Screen
 
 ![image4][image4]
 
 ### Feature 3
 
-Description of Feature
+Login
 
 ![image5][image5]
 
@@ -152,10 +151,6 @@ We were tasked with building a competition app, and I wanted to build something 
 ### Wireframes
 
 ![image7][image7]
-
-### User-flow
-
-![image8][image8]
 
 <!-- DEVELOPMENT PROCESS -->
 
@@ -254,10 +249,10 @@ Distributed under the MIT License. See `LICENSE` for more information.\
 [image2]: mockups/press.png
 [image3]: mockups/post.png
 [image4]: mockups/winnings.png
-[image5]: mockups/wireframes/Login.png
+[image5]: mockups/press.png
 [image6]: mockups/wireframes/Login.png
-[image7]: mockups/wireframes/Login.png
-[image8]: mockups/wireframes/Login.png
+[image7]: mockups/wireframes/Signup.png
+[image8]: mockups/wireframes/Time.png
 [image9]: mockups/wireframes/Login.png
 [image10]: mockups/wireframes/Login.png
 
