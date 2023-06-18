@@ -192,9 +192,9 @@ I started with the design of the app, trying to get the screens as close to the 
 
 ### Mockups
 
-![image9][image9]
+![image4][image4]
 <br>
-![image10][image10]
+![image2][image2]
 
 <!-- VIDEO DEMONSTRATION -->
 
