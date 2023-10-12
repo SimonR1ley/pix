@@ -11,7 +11,11 @@ import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { getCurrentUser } from "../sevices/firebaseAuth";
-import { addWinningsToUser, removeArtworkFromDb } from "../sevices/firebaseDb";
+import {
+  addImageToMarket,
+  addWinningsToUser,
+  removeArtworkFromDb,
+} from "../sevices/firebaseDb";
 
 const Competitors = ({ route, navigation }) => {
   const user = getCurrentUser();
@@ -19,9 +23,10 @@ const Competitors = ({ route, navigation }) => {
   const { data, expired } = route.params;
   console.log(expired);
 
-  console.log(data.image);
+  console.log("From Comp", data);
 
   let userWithMaxTime = null;
+  let userWithMaxTimeName = null;
 
   useEffect(() => {
     // if (data.ownerEmail === user.email) {
@@ -45,6 +50,7 @@ const Competitors = ({ route, navigation }) => {
         ) {
           maxCompetitorTime = entry.competitorTime;
           userWithMaxTime = entry.competitorId; // Update userWithMaxTime
+          userWithMaxTimeName = entry.name;
         }
       });
 
@@ -64,7 +70,17 @@ const Competitors = ({ route, navigation }) => {
         image: data.image,
       };
 
+      var marketImage = {
+        winningUserName: userWithMaxTimeName,
+        winningUserId: userWithMaxTime,
+        winningUserImage: data.ownerImage,
+        imageTitle: data.imageTitle,
+        image: data.image,
+        offers: [],
+      };
+
       addWinningsToUser(userWithMaxTime, winningArtWork);
+      addImageToMarket(marketImage);
       removeArtworkFromDb(data.id);
     }
   }, []);

@@ -73,7 +73,7 @@ const CardPost = ({ data, theEntries }) => {
       const minutesLeft = Math.floor((timeDifference / (1000 * 60)) % 60);
       const secondsLeft = Math.floor((timeDifference / 1000) % 60);
 
-      const timeLeftString = `${hoursLeft} hours, ${minutesLeft} minutes, ${secondsLeft} seconds`;
+      const timeLeftString = `${hoursLeft} : ${minutesLeft} : ${secondsLeft}`;
       console.log(timeLeftString);
       setTimeLeft(timeLeftString);
       return timeLeftString;
@@ -90,13 +90,14 @@ const CardPost = ({ data, theEntries }) => {
   return (
     <View
       style={{
-        width: 410,
-        height: 620,
+        width: "95%",
+        height: 400,
         backgroundColor: "white",
         alignSelf: "center",
         borderRadius: 30,
         display: "flex",
         flexDirection: "column",
+        position: "relative",
         justifyContent: "center",
         alignItems: "center",
         shadowOffset: { width: 0, height: 0 },
@@ -106,33 +107,67 @@ const CardPost = ({ data, theEntries }) => {
         margin: 10,
       }}
     >
-      <Text
+      <View
         style={{
-          marginBottom: 10,
-          fontSize: 25,
-          fontWeight: "800",
-          color: "black",
+          width: "80%",
+          height: "15%",
+          backgroundColor: "rgba(40,40,40,0.7)",
+          position: "absolute",
+          bottom: 15,
+          borderRadius: 20,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        {data.imageTitle}
-      </Text>
-      <Text
-        style={{
-          marginBottom: 10,
-          fontSize: 15,
-          color: "black",
-        }}
-      >
-        Owned By: {data.owner}
-      </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "800",
+            color: "white",
+          }}
+        >
+          {data.imageTitle}
+        </Text>
+
+        {/* <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              width: 30,
+              height: 30,
+              backgroundColor: "white",
+              marginRight: 10,
+              borderRadius: 100,
+            }}
+          ></View>
+          <Text
+            style={{
+              fontSize: 15,
+              color: "white",
+            }}
+          >
+            {data.owner}
+          </Text>
+        </View> */}
+      </View>
+
       {/* <Text style={{ marginBottom: 5, fontSize: 18 }}>Time Left</Text> */}
       {!imgDesc ? (
         <TouchableOpacity
           style={{
-            width: "90%",
-            height: "70%",
+            width: "100%",
+            height: "100%",
             backgroundColor: "grey",
             borderRadius: 30,
+            position: "absolute",
+            zIndex: -1,
           }}
           onPress={() => setImgDesc(true)}
           activeOpacity={0.9}
@@ -157,6 +192,8 @@ const CardPost = ({ data, theEntries }) => {
             backgroundColor: "white",
             alignItems: "center",
             justifyContent: "center",
+            position: "absolute",
+            zIndex: -1,
           }}
           onPress={() => setImgDesc(false)}
           activeOpacity={0.9}
@@ -165,71 +202,101 @@ const CardPost = ({ data, theEntries }) => {
         </TouchableOpacity>
       )}
 
-      <Text style={{ marginBottom: 5, marginTop: 15, fontSize: 14 }}>
-        {timeLeft}
-      </Text>
       <View
         style={{
-          width: "80%",
-          height: "6%",
-          //   backgroundColor: "red",
+          width: 150,
+          height: 40,
+          borderRadius: 15,
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space-around",
-          marginTop: 10,
+          justifyContent: "space-evenly",
+          flexDirection: "row",
+          // borderStyle: "solid",
+          // borderWidth: "2px",
+          // backgroundColor: "#37B4FB",
+          backgroundColor: "rgba(40,40,40,0.7)",
+          position: "absolute",
+          top: 20,
+          right: 15,
+          // borderColor: "#37B4FB",
         }}
       >
-        {!entered ? (
-          <TouchableOpacity
-            style={{
-              width: "40%",
-              height: "100%",
-              borderRadius: 8,
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              borderStyle: "solid",
-              borderWidth: "2px",
-              backgroundColor: "#37B4FB",
-              borderColor: "#37B4FB",
-            }}
-            onPress={() => navigation.push("Press", { artData })}
-          >
-            <Text style={{ color: "white", fontWeight: "800" }}>Enter</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={{
-              width: "50%",
-              height: "100%",
-              borderRadius: 8,
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              borderStyle: "solid",
-              backgroundColor: "#37B4FB",
-            }}
-            onPress={() => navigation.push("Competitors", { data, expired })}
-          >
-            <Image
-              source={require("../assets/entries.png")}
-              style={{
-                alignSelf: "center",
-                width: "12%",
-                height: "60%",
-                marginRight: 5,
-              }}
-            />
-
-            <Text style={{ color: "white", fontWeight: "400" }}>
-              Competitors
-            </Text>
-          </TouchableOpacity>
-        )}
+        <Image
+          source={require("../assets/time.png")}
+          style={{
+            alignSelf: "center",
+            width: 20,
+            height: 20,
+          }}
+        />
+        <Text style={{ color: "white", fontWeight: "900", fontSize: 10 }}>
+          {timeLeft}
+        </Text>
       </View>
+
+      {!entered ? (
+        <TouchableOpacity
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 12,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            // borderStyle: "solid",
+            // borderWidth: "2px",
+            // backgroundColor: "#37B4FB",
+            backgroundColor: "rgba(40,40,40,0.7)",
+            position: "absolute",
+            top: 20,
+            left: 15,
+            // borderColor: "#37B4FB",
+          }}
+          onPress={() => navigation.push("Press", { artData })}
+        >
+          <Image
+            source={require("../assets/add.png")}
+            style={{
+              alignSelf: "center",
+              width: "50%",
+              height: "50%",
+            }}
+          />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 12,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            // borderStyle: "solid",
+            // borderWidth: "2px",
+            // backgroundColor: "#37B4FB",
+            backgroundColor: "rgba(40,40,40,0.7)",
+            position: "absolute",
+            top: 20,
+            left: 15,
+          }}
+          onPress={() => navigation.push("Competitors", { data, expired })}
+        >
+          <Image
+            source={require("../assets/entries.png")}
+            style={{
+              alignSelf: "center",
+              width: "60%",
+              height: "60%",
+            }}
+          />
+
+          {/* <Text style={{ color: "white", fontWeight: "400" }}>Competitors</Text> */}
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

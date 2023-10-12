@@ -13,6 +13,8 @@ import Competitors from "./screens/Competitors";
 import UserSettings from "./screens/UserSettings";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./config/firebase";
+import Market from "./screens/Market";
+import UserEntries from "./screens/UserEntries";
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +49,8 @@ const StackNavigator = () => {
           <Stack.Screen name="Feed" component={Feed} />
           <Stack.Screen name="Post" component={Post} />
           <Stack.Screen name="Competitors" component={Competitors} />
+          <Stack.Screen name="UserEntries" component={UserEntries} />
+          <Stack.Screen name="Market" component={Market} />
           <Stack.Screen name="Press" component={Press} />
           <Stack.Screen name="Individual" component={Individual} />
           <Stack.Screen name="Profile" component={Profile} />

@@ -62,7 +62,7 @@ const Signup = () => {
   // console.log(auth.currentUser.email);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#161616" }}>
       {!loading ? (
         <>
           <View style={{ width: "100%", height: "25%", marginBottom: 20 }}>
@@ -111,19 +111,19 @@ const Signup = () => {
               onChangeText={(newText) => setUsername(newText)}
             />
 
-            {/* <TextInput
-          style={{
-            width: "90%",
-            height: 50,
-            backgroundColor: "#2A2D2E",
-            borderRadius: 10,
-            textAlign: "center",
-            color: "white",
-          }}
-          placeholder="Surname"
-          placeholderTextColor="white"
-          // onChangeText={(newText) => setSurname(newText)}
-        /> */}
+            <TextInput
+              style={{
+                width: "90%",
+                height: 50,
+                backgroundColor: "#2A2D2E",
+                borderRadius: 10,
+                textAlign: "center",
+                color: "white",
+              }}
+              placeholder="Surname"
+              placeholderTextColor="white"
+              // onChangeText={(newText) => setSurname(newText)}
+            />
 
             <TextInput
               style={{
@@ -179,7 +179,7 @@ const Signup = () => {
                 justifyContent: "center",
                 width: 180,
                 height: 50,
-                backgroundColor: "#37B4FB",
+                backgroundColor: "#BBFB05",
                 borderRadius: 10,
                 alignSelf: "center",
                 marginTop: 20,
@@ -187,7 +187,7 @@ const Signup = () => {
               }}
               onPress={registerUser}
             >
-              <Text style={{ color: "white", fontWeight: "700", fontSize: 17 }}>
+              <Text style={{ color: "black", fontWeight: "700", fontSize: 17 }}>
                 Signup
               </Text>
             </TouchableOpacity>
@@ -212,7 +212,7 @@ const Signup = () => {
             alignItems: "center",
           }}
         >
-          <Text style={{ color: "black", textAlign: "center" }}>Loading</Text>
+          <Text style={{ color: "white", textAlign: "center" }}>Loading</Text>
           <ActivityIndicator animating={loading} size={40} />
         </View>
       )}

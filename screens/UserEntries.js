@@ -25,7 +25,7 @@ import {
 import { db } from "../config/firebase";
 import { useFocusEffect } from "@react-navigation/native";
 
-const Feed = ({ navigation }) => {
+const UserEntries = ({ navigation }) => {
   const [projects, setProjects] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -94,7 +94,7 @@ const Feed = ({ navigation }) => {
           }}
         >
           {/* My Balence: $1000 */}
-          Competitions
+          Entries
         </Text>
         <TouchableOpacity
           style={{
@@ -115,46 +115,18 @@ const Feed = ({ navigation }) => {
       </View>
 
       <View style={{ height: "100%" }}>
-        <ScrollView
-          style={{}}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={getAllProjects}
-            />
-          }
-        >
-          {projects.map((project, index) => (
-            <CardPost key={index} data={project} theEntries={project.entries} />
-          ))}
-          <View style={{ height: 150, width: "100%" }}></View>
-        </ScrollView>
+        <FlatList
+          data={projects}
+          renderItem={({ item, index }) => (
+            <CardPost key={index} data={item} theEntries={item.entries} />
+          )}
+          numColumns={3}
+        />
+
+        <View style={{ height: 150, width: "100%" }}></View>
       </View>
-
-      {/* <Image
-        style={{
-          width: 35,
-          height: 10,
-          alignSelf: "center",
-          marginTop: 15,
-        }}
-        source={require("../assets/Slider.png")}
-      /> */}
-
-      {/* <View
-        style={{
-          height: 80,
-          bottom: 0,
-          width: "100%",
-          position: "absolute",
-          backgroundColor: "rgba(40,40,40,0.7)",
-        }}
-      >
-        <Nav active={"Feed"} />
-      </View> */}
     </SafeAreaView>
   );
 };
 
-export default Feed;
+export default UserEntries;

@@ -43,10 +43,17 @@ const Login = () => {
 
   const navigation = useNavigation();
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#161616" }}>
       {!loading ? (
         <>
-          <View style={{ width: "100%", height: "25%", marginBottom: 20 }}>
+          <View
+            style={{
+              width: "100%",
+              height: "25%",
+              marginBottom: 20,
+              backgroundColor: "#161616",
+            }}
+          >
             <View
               style={{
                 width: 160,
@@ -54,6 +61,7 @@ const Login = () => {
                 alignSelf: "center",
                 justifyContent: "center",
                 marginTop: 30,
+                backgroundColor: "#161616",
               }}
             >
               <Image
@@ -77,6 +85,7 @@ const Login = () => {
               flexDirection: "column",
               justifyContent: "center",
               gap: 20,
+              backgroundColor: "#161616",
             }}
           >
             <TextInput
@@ -123,7 +132,7 @@ const Login = () => {
                 justifyContent: "center",
                 width: 180,
                 height: 50,
-                backgroundColor: "#37B4FB",
+                backgroundColor: "#BBFB05",
                 borderRadius: 10,
                 alignSelf: "center",
                 marginTop: 20,
@@ -131,14 +140,14 @@ const Login = () => {
               }}
               onPress={logOn}
             >
-              <Text style={{ color: "white", fontWeight: "700", fontSize: 17 }}>
+              <Text style={{ color: "black", fontWeight: "700", fontSize: 17 }}>
                 Login
               </Text>
             </TouchableOpacity>
 
             <Button
               title="Signup"
-              color="black"
+              color="white"
               style={{
                 width: 100,
                 height: 50,
@@ -156,7 +165,7 @@ const Login = () => {
             alignItems: "center",
           }}
         >
-          <Text style={{ color: "black", textAlign: "center" }}>Loading</Text>
+          <Text style={{ color: "white", textAlign: "center" }}>Loading</Text>
           <ActivityIndicator animating={loading} size={40} />
         </View>
       )}

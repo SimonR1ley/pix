@@ -68,7 +68,7 @@ export const getAllUsersFromCollection = async () => {
 //     }
 //   } catch (e) {
 //     console.log("Something went wrong: " + e);
-//   }
+//
 // };
 
 export const addProjectToCollection = async (project) => {
@@ -80,7 +80,7 @@ export const addProjectToCollection = async (project) => {
         project.image,
         `projects/${docRef.id}`
       );
-      await updateDoc(docRef, { image: imageURL }); // Assuming the field name for the image URL is 'image'
+      await updateDoc(docRef, { image: imageURL });
       return true;
     } else {
       return false;
@@ -136,6 +136,29 @@ export const getAllProjectsFromCollection = async () => {
   }
 };
 
+export const getAllProjectsFromMarket = async () => {
+  try {
+    var projects = [];
+
+    const snapshot = await getDocs(collection(db, "market"));
+
+    snapshot.forEach((doc) => {
+      const projectData = doc.data();
+      const project = {
+        ...projectData,
+        id: doc.id,
+        imageURL: projectData.image, // Assuming the field name for the image URL is 'image'
+      };
+      projects.push(project);
+    });
+
+    return projects;
+  } catch (e) {
+    console.log("Something went wrong: " + e);
+    return [];
+  }
+};
+
 export const enterCompetition = async (competitor, artworkId) => {
   // console.log(
   //   "Artwork Id: " + artworkId + " Competitor Email: " + competitor.email
@@ -170,9 +193,24 @@ export const addWinningsToUser = async (userId, winningArtWork) => {
     });
 };
 
-export const updateUserInDb = async (userInfo, uid) => {
+export const addImageToMarket = async (project) => {
+  const marketRef = await addDoc(collection(db, "market"), project);
+
+  await addDoc(collection(db, "market"), project);
+  console.log("Added artwork to market successfully", marketRef.id);
+  if (marketRef.id) {
+    const imageURL = await uploadToStorage(
+      project.image,
+      `projects/${marketRef.id}`
+    );
+    await updateDoc(docRmarketRefef, { image: imageURL });
+  }
+};
+
+export const updateUserInDb = async (uid, userInfo) => {
+  console.log("From DB", userInfo);
   try {
-    const docRef = await updateDoc(doc(db, "users", uid), userInfo);
+    await updateDoc(doc(db, "users", uid), userInfo);
   } catch (e) {
     console.log("Something went wrong with user update");
   }

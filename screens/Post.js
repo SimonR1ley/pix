@@ -68,6 +68,7 @@ const Post = ({ navigation }) => {
         owner: ownerInfo.displayName,
         userId: ownerInfo.uid,
         uploadedAt: Date(),
+        ownerImage: ownerInfo.photoURL,
         entries: [],
         ownerEmail: ownerInfo.email,
         image, // Add the image URI to the project object
@@ -105,7 +106,9 @@ const Post = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#F2F2F2" }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#161616", height: "100%", flex: 1 }}
+    >
       <View
         style={{
           width: "100%",
@@ -116,39 +119,14 @@ const Post = ({ navigation }) => {
           flexDirection: "row",
           paddingLeft: 20,
           paddingRight: 20,
+          // backgroundColor: "red",
         }}
       >
-        <TouchableOpacity
-          style={{
-            width: 50,
-            height: 50,
-            backgroundColor: "#212121",
-            borderRadius: 30,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingRight: 5,
-            position: "absolute",
-            left: 25,
-          }}
-          onPress={() => {
-            navigation.navigate("Feed");
-          }}
-        >
-          <Image
-            style={{
-              width: "60%",
-              height: "60%",
-              // backgroundColor: "green",
-            }}
-            source={require("../assets/return.png")}
-          />
-        </TouchableOpacity>
-
         <Text
           style={{
             fontSize: 24,
             fontWeight: "700",
+            color: "white",
           }}
         >
           Post Artwork
@@ -160,15 +138,14 @@ const Post = ({ navigation }) => {
           style={{
             width: 410,
             height: 600,
-            backgroundColor: "#F2F2F2",
+            backgroundColor: "#161616",
             alignSelf: "center",
             borderRadius: 30,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            margin: 10,
-            marginTop: "10%",
+            // margin: 10,
           }}
         >
           <TextInput
@@ -254,26 +231,12 @@ const Post = ({ navigation }) => {
             placeholderTextColor="white"
             onChangeText={(newText) => setDescription(newText)}
           />
-          {/* <TextInput
-            style={{
-              width: "50%",
-              height: 40,
-              backgroundColor: "#2A2D2E",
-              borderRadius: 10,
-              color: "white",
-              textAlign: "center",
-              marginTop: 20,
-            }}
-            placeholder="Cost of Image"
-            placeholderTextColor="white"
-            onChangeText={(newText) => setCost(newText)}
-          /> */}
           <TouchableOpacity
             title="View"
             style={{
               width: "50%",
               height: 40,
-              backgroundColor: "#37B4FB",
+              backgroundColor: "#BBFB05",
               borderRadius: 10,
               display: "flex",
               justifyContent: "center",
@@ -283,7 +246,7 @@ const Post = ({ navigation }) => {
             // onPress={uploadImage}
             onPress={createProject}
           >
-            <Text style={{ color: "white" }}>Upload</Text>
+            <Text style={{ color: "black", fontWeight: "600" }}>Upload</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -301,7 +264,7 @@ const Post = ({ navigation }) => {
         </View>
       )}
 
-      <Nav />
+      {/* <Nav /> */}
     </SafeAreaView>
   );
 };

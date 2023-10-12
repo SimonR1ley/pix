@@ -75,12 +75,14 @@ const Profile = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView
+    <View
       style={{
         display: "flex",
         justifyContent: "center",
         flexDirection: "column",
         alignItems: "center",
+        flex: 1,
+        backgroundColor: "#161616",
       }}
     >
       <View
@@ -89,6 +91,7 @@ const Profile = ({ navigation }) => {
           height: 100,
           borderRadius: 100,
           backgroundColor: "black",
+          marginTop: "15%",
         }}
       >
         <Image
@@ -101,7 +104,14 @@ const Profile = ({ navigation }) => {
         />
       </View>
 
-      <Text style={{ fontSize: 30, marginTop: 20, fontWeight: "800" }}>
+      <Text
+        style={{
+          fontSize: 30,
+          marginTop: 20,
+          fontWeight: "800",
+          color: "white",
+        }}
+      >
         {user.displayName}
       </Text>
 
@@ -130,7 +140,14 @@ const Profile = ({ navigation }) => {
         />
       </TouchableOpacity>
 
-      <Text style={{ fontSize: 16, fontWeight: "600", marginTop: 30 }}>
+      <Text
+        style={{
+          fontSize: 16,
+          fontWeight: "600",
+          marginTop: 3,
+          color: "white",
+        }}
+      >
         My Winnings
       </Text>
 
@@ -149,8 +166,8 @@ const Profile = ({ navigation }) => {
             <View
               key={index}
               style={{
-                width: 400,
-                height: 400,
+                width: "95%",
+                height: 350,
                 backgroundColor: "grey",
                 borderRadius: 20,
                 alignSelf: "center",
@@ -172,10 +189,21 @@ const Profile = ({ navigation }) => {
             You have no Trophes yet. Keep playing!
           </Text>
         )}
+        <View style={{ height: 100, width: "100%" }}></View>
       </ScrollView>
 
-      <Nav />
-    </SafeAreaView>
+      {/* <View
+        style={{
+          height: 80,
+          bottom: 0,
+          width: "100%",
+          position: "absolute",
+          backgroundColor: "rgba(40,40,40,0.7)",
+        }}
+      >
+        <Nav active={"Profile"} />
+      </View> */}
+    </View>
   );
 };
 

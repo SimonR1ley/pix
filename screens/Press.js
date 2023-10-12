@@ -77,7 +77,7 @@ const Press = ({ route }) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ backgroundColor: "#161616" }}>
       <View
         style={{
           width: "100%",
@@ -88,7 +88,14 @@ const Press = ({ route }) => {
           flexDirection: "column",
         }}
       >
-        <Text style={{ fontSize: 25, marginBottom: 10, marginTop: 20 }}>
+        <Text
+          style={{
+            fontSize: 25,
+            marginBottom: 10,
+            marginTop: 20,
+            color: "white",
+          }}
+        >
           Count
         </Text>
         <View
@@ -103,7 +110,7 @@ const Press = ({ route }) => {
             marginBottom: 10,
           }}
         >
-          <Text style={{ fontSize: 35, fontWeight: "700" }}>
+          <Text style={{ fontSize: 35, fontWeight: "700", color: "white" }}>
             {/* <CountDown
             until={counter}
             // onFinish={() => alert("finished")}
@@ -117,7 +124,7 @@ const Press = ({ route }) => {
           </Text>
         </View>
 
-        <Text style={{ fontSize: 25, marginBottom: 20 }}>
+        <Text style={{ fontSize: 25, marginBottom: 20, color: "white" }}>
           Click and hold to Start
         </Text>
       </View>
@@ -134,18 +141,32 @@ const Press = ({ route }) => {
           style={{
             width: "70%",
             height: "50%",
-            backgroundColor: "#37B4FB",
+            // backgroundColor: "#37B4FB",
             marginTop: 30,
-            borderRadius: 20,
-            shadowOffset: { width: 0, height: 0 },
-            shadowColor: "#171717",
-            shadowOpacity: 0.7,
-            shadowRadius: 2,
+            borderRadius: 1000,
+            borderWidth: 5,
+            borderColor: "#BBFB05",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            // shadowOffset: { width: 0, height: 0 },
+            // shadowColor: "#171717",
+            // shadowOpacity: 0.7,
+            // shadowRadius: 2,
           }}
           onPressIn={addOne}
           onPressOut={stopTimer}
           // onLongPress={() => setTime()}
-        ></TouchableOpacity>
+        >
+          <View
+            style={{
+              width: "90%",
+              height: "90%",
+              backgroundColor: "#BBFB05",
+              borderRadius: 1000,
+            }}
+          ></View>
+        </TouchableOpacity>
       </View>
 
       {/* <Nav /> */}
