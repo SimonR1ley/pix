@@ -79,7 +79,7 @@ const Competitors = ({ route, navigation }) => {
         offers: [],
       };
 
-      addWinningsToUser(userWithMaxTime, winningArtWork);
+      // addWinningsToUser(userWithMaxTime, winningArtWork);
       addImageToMarket(marketImage);
       removeArtworkFromDb(data.id);
     }

@@ -21,7 +21,7 @@ import { useFocusEffect } from "@react-navigation/native";
 const MarketCard = ({ data, theEntries, imageName }) => {
   const user = getCurrentUser();
 
-  console.log(data.winningUserName);
+  console.log(data.id);
 
   //   const [artData, setArtData] = useState(data.id);
 
@@ -181,7 +181,8 @@ const MarketCard = ({ data, theEntries, imageName }) => {
             data.imageTitle,
             data.image,
             data.winningUserName,
-            data.winningUserImage
+            data.winningUserImage,
+            data.id
           )
         }
         activeOpacity={0.9}

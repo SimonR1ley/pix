@@ -122,7 +122,7 @@ const Nav = () => {
             source={marketIcon}
           />
         </TouchableOpacity>
-        {user.displayName === "SimonRiley" ? (
+        {/* {user.displayName === "SimonRiley" ? (
           <TouchableOpacity
             style={{ width: 38, height: "75%" }}
             onPress={() => {
@@ -139,7 +139,24 @@ const Nav = () => {
               source={postIcon}
             />
           </TouchableOpacity>
-        ) : null}
+        ) : null} */}
+
+        <TouchableOpacity
+          style={{ width: 38, height: "75%" }}
+          onPress={() => {
+            setActive("Post");
+            navigation.navigate("Post");
+          }}
+        >
+          <Image
+            style={{
+              width: "100%",
+              height: "100%",
+              // backgroundColor: "green",
+            }}
+            source={postIcon}
+          />
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={{ width: 35, height: "50%" }}

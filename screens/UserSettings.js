@@ -7,8 +7,9 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Modal,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   getCurrentUser,
   signoutUser,
@@ -16,7 +17,10 @@ import {
 } from "../sevices/firebaseAuth";
 import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
-import { updateUserInDb } from "../sevices/firebaseDb";
+import {
+  getAllUsersFromCollection,
+  updateUserInDb,
+} from "../sevices/firebaseDb";
 import { uploadToStorage } from "../sevices/firebaseStorage";
 
 const UserSettings = ({ navigation }) => {
@@ -25,6 +29,8 @@ const UserSettings = ({ navigation }) => {
   const [username, setUsername] = useState(user.displayName);
   const [profileUrl, setProfileUrl] = useState(user.photoURL);
   const [email, setEmail] = useState(user.email);
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -56,6 +62,20 @@ const UserSettings = ({ navigation }) => {
   //   });
   // };
 
+  useEffect(() => {
+    getAllUsers();
+  }, []);
+
+  const [userFunds, setUserFunds] = useState();
+
+  const getAllUsers = async () => {
+    const allUsers = await getAllUsersFromCollection();
+
+    const filterd = allUsers.filter((item) => item.id === user.uid);
+    setUserFunds(filterd[0].diamonds);
+    console.log("Market Filtered", filterd[0].diamonds);
+  };
+
   const updateProfileInformation = async () => {
     setLoading(true);
 
@@ -73,7 +93,7 @@ const UserSettings = ({ navigation }) => {
     await updateUserInDb(user.uid, {
       username,
       profileUrl: uploadedImageUrl ? uploadedImageUrl : profileUrl,
-      email,
+      // email,
     });
 
     setLoading(false);
@@ -113,6 +133,79 @@ const UserSettings = ({ navigation }) => {
         flex: 1,
       }}
     >
+      <Modal
+        style={{ justifyContent: "flex-end", position: "relative" }}
+        // animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View
+          style={{
+            flex: 1, // Use flex: 1 to make it expand and occupy the remaining space
+            backgroundColor: "rgba(55,55,55,0.7)",
+            position: "absolute",
+            zIndex: 2,
+            bottom: 0, // Position at the bottom
+            width: "100%",
+            height: "100%", // You can adjust the height as needed
+            borderTopLeftRadius: 30,
+            borderTopRightRadius: 30,
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+          }}
+        >
+          <View
+            style={{
+              // width: "90%",
+              // height: 80,
+              backgroundColor: "#BBFB05",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "coloumn",
+              padding: 20,
+              borderRadius: 20,
+            }}
+          >
+            <Text style={{ color: "black", fontSize: 28, fontWeight: "800" }}>
+              REALLY!?!
+            </Text>
+            <Text
+              style={{
+                color: "black",
+                fontSize: 13,
+                fontWeight: "500",
+                marginTop: 10,
+              }}
+            >
+              Come on dude, nice try. See you tomrrow :)
+            </Text>
+            <TouchableOpacity
+              style={{
+                width: 150,
+                height: 40,
+                backgroundColor: "white",
+                borderRadius: 10,
+                marginTop: 15,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => {
+                setModalVisible(false);
+              }}
+            >
+              <Text style={{ fontWeight: "500" }}>Worth a try</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       {!loading ? (
         <>
           <View
@@ -211,7 +304,7 @@ const UserSettings = ({ navigation }) => {
                 color: "white",
               }}
             >
-              Username
+              Update Username
             </Text>
             <TextInput
               placeholder={user.displayName}
@@ -234,6 +327,48 @@ const UserSettings = ({ navigation }) => {
                 color: "white",
               }}
             >
+              Update Diamonds
+            </Text>
+
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#2A2D2E",
+                width: "90%",
+                height: 40,
+                paddingLeft: 15,
+                borderRadius: 10,
+                color: "white",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+              onPress={() => {
+                setModalVisible(true);
+              }}
+            >
+              <Image
+                source={require("../assets/diamond.png")}
+                style={{ width: 20, height: 20, marginRight: 5 }}
+              />
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "600",
+                  marginLeft: 5,
+                }}
+              >
+                {userFunds}
+              </Text>
+            </TouchableOpacity>
+
+            {/* <Text
+              style={{
+                marginTop: 30,
+                marginBottom: 10,
+                color: "white",
+              }}
+            >
               Email
             </Text>
             <TextInput
@@ -248,7 +383,7 @@ const UserSettings = ({ navigation }) => {
               }}
               placeholderTextColor="white"
               onChangeText={(newText) => setEmail(newText)}
-            />
+            /> */}
 
             <TouchableOpacity
               style={{

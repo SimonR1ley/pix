@@ -9,6 +9,7 @@ import {
   ScrollView,
   RefreshControl,
   Modal,
+  TextInput,
 } from "react-native";
 import React from "react";
 import CardPost from "../components/CardPost";
@@ -18,6 +19,7 @@ import {
   getAllProjectsFromCollection,
   getAllProjectsFromMarket,
   getAllUsersFromCollection,
+  makeOffer,
 } from "../sevices/firebaseDb";
 import { getCurrentUser } from "../sevices/firebaseAuth";
 import {
@@ -36,10 +38,13 @@ const Market = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const [imageView, setImageView] = useState("");
+  const [artworkId, setArtworkId] = useState();
   const [imageName, setImageName] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [ownerImage, setOwnerImage] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [offerAmount, setOfferAmount] = useState(0);
 
   const [entered, setEntered] = useState(false);
 
@@ -79,17 +84,42 @@ const Market = ({ navigation }) => {
     setRefreshing(false);
   };
 
+  const [userFunds, setUserFunds] = useState();
+
+  const getAllUsers = async () => {
+    const allUsers = await getAllUsersFromCollection();
+
+    const filterd = allUsers.filter((item) => item.id === user.uid);
+    setUserFunds(filterd[0].diamonds);
+    console.log("Market Filtered", filterd[0].diamonds);
+  };
+
   useEffect(() => {
     getAllProjects();
+    getAllUsers();
   }, []);
 
-  const ImageViewName = (name, image, owner, ownerImage) => {
+  const ImageViewName = (name, image, owner, ownerImage, artworkId) => {
     setModalVisible(true);
     setImageView(image);
+    setArtworkId(artworkId);
     setImageName(name);
     setOwnerName(owner);
     setOwnerImage(ownerImage);
-    // console.log(name);
+    console.log("Got id", artworkId);
+  };
+
+  const MakeOffer = () => {
+    var offer = {
+      userId: user.uid,
+      username: user.displayName,
+      offerAmount: offerAmount,
+      status: "unacceppted",
+    };
+
+    if (offerAmount) {
+      makeOffer(artworkId, offer);
+    }
   };
 
   return (
@@ -200,7 +230,12 @@ const Market = ({ navigation }) => {
               >
                 <Image
                   source={{ uri: user.photoURL }}
-                  style={{ width: "100%", height: "100%", borderRadius: 100 }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: 100,
+                    backgroundColor: "#979797",
+                  }}
                 />
               </TouchableOpacity>
               <View
@@ -245,7 +280,7 @@ const Market = ({ navigation }) => {
                     }}
                   >
                     {/* My Balence: $1000 */}
-                    700
+                    {userFunds}
                   </Text>
                 </View>
               </View>
@@ -277,6 +312,7 @@ const Market = ({ navigation }) => {
               alignItems: "center",
               justifyContent: "space-evenly",
               position: "relative",
+              marginTop: 20,
             }}
           >
             <Image
@@ -319,16 +355,16 @@ const Market = ({ navigation }) => {
                   marginTop: 10,
                 }}
               >
-                <Image
+                {/* <Image
                   source={{ uri: ownerImage }}
                   style={{
                     width: 30,
                     height: 30,
-                    // backgroundColor: "purple",
+                    backgroundColor: "#979797",
                     marginRight: 10,
                     borderRadius: 100,
                   }}
-                />
+                /> */}
                 <Text
                   style={{ color: "white", fontSize: 16, fontWeight: "600" }}
                 >
@@ -351,7 +387,7 @@ const Market = ({ navigation }) => {
               <Text style={{ color: "white", fontSize: 24, fontWeight: "800" }}>
                 Buy
               </Text>
-              <View
+              {/* <View
                 style={{
                   width: 220,
                   height: 45,
@@ -374,8 +410,43 @@ const Market = ({ navigation }) => {
                 >
                   2200
                 </Text>
-              </View>
+              </View> */}
+
               <View
+                style={{
+                  width: 220,
+                  height: 45,
+                  backgroundColor: "#2A2D2E",
+                  borderRadius: 15,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: 20,
+                  marginTop: 20,
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                }}
+              >
+                <Image
+                  source={require("../assets/diamond.png")}
+                  style={{ width: 20, height: 20, marginRight: 10 }}
+                />
+                <TextInput
+                  style={{
+                    flex: 1, // This allows the TextInput to take up the available space
+                    color: "#979797", // Text color
+                    // backgroundColor: "red",
+                    fontWeight: "600",
+                  }}
+                  placeholder="Your offer"
+                  placeholderTextColor="#979797"
+                  onChangeText={(text) => {
+                    setOfferAmount(text);
+                  }}
+                />
+              </View>
+
+              <TouchableOpacity
                 style={{
                   width: 160,
                   height: 45,
@@ -386,13 +457,16 @@ const Market = ({ navigation }) => {
                   alignItems: "center",
                   justifyContent: "center",
                 }}
+                onPress={() => {
+                  MakeOffer();
+                }}
               >
                 <Text
                   style={{ color: "black", fontWeight: "700", fontSize: 17 }}
                 >
                   Offer
                 </Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

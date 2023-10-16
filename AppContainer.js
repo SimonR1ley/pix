@@ -6,6 +6,7 @@ import Nav from "./components/Nav";
 
 const AppContainer = () => {
   const [routeName, setRouteName] = useState("");
+
   return (
     <NavigationContainer
       onStateChange={(state) => {

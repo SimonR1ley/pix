@@ -36,13 +36,7 @@ export const getAllUsersFromCollection = async () => {
   try {
     var users = [];
 
-    const snapshot = await getDocs(
-      query(
-        collection(db, "users")
-        // orderBy("year", "desc"),
-        // orderBy("title")
-      )
-    );
+    const snapshot = await getDocs(query(collection(db, "users")));
 
     snapshot.forEach((doc) => {
       users.push({ ...doc.data(), id: doc.id });
@@ -151,6 +145,8 @@ export const getAllProjectsFromMarket = async () => {
         imageURL: projectData.image, // Assuming the field name for the image URL is 'image'
       };
       projects.push(project);
+
+      // console.log("Project", project);
     });
 
     return projects;
@@ -213,4 +209,25 @@ export const updateUserInDb = async (uid, userInfo) => {
   } catch (e) {
     console.log("Something went wrong with user update");
   }
+};
+
+export const updateUserFundsInDb = async (uid, funds) => {
+  console.log("Added diamonds to account", funds);
+  try {
+    await updateDoc(doc(db, "users", uid), funds);
+  } catch (e) {
+    console.log("Something went wrong with user update");
+  }
+};
+
+export const makeOffer = async (artworkId, amount) => {
+  const docRef = doc(db, "market", artworkId);
+
+  await updateDoc(docRef, { offers: arrayUnion(amount) })
+    .then(() => {
+      console.log("Offer added successfully");
+    })
+    .catch((error) => {
+      console.error("Error updating winnings:", error);
+    });
 };
