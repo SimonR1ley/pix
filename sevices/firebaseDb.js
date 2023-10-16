@@ -23,6 +23,7 @@ export const createUserInDb = async (username, email, uid) => {
       username,
       email,
       winnings: [],
+      diamonds: 1000,
       createdAt: Timestamp.now(),
     });
     console.log("User Added doc id: " + docRef.id);
@@ -195,15 +196,13 @@ export const addWinningsToUser = async (userId, winningArtWork) => {
 
 export const addImageToMarket = async (project) => {
   const marketRef = await addDoc(collection(db, "market"), project);
-
-  await addDoc(collection(db, "market"), project);
   console.log("Added artwork to market successfully", marketRef.id);
   if (marketRef.id) {
     const imageURL = await uploadToStorage(
       project.image,
       `projects/${marketRef.id}`
     );
-    await updateDoc(docRmarketRefef, { image: imageURL });
+    await updateDoc(marketRef, { image: imageURL });
   }
 };
 

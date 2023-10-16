@@ -115,13 +115,34 @@ const UserEntries = ({ navigation }) => {
       </View>
 
       <View style={{ height: "100%" }}>
-        <FlatList
-          data={projects}
-          renderItem={({ item, index }) => (
-            <CardPost key={index} data={item} theEntries={item.entries} />
-          )}
-          numColumns={3}
-        />
+        <ScrollView
+          style={{}}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={getAllProjects}
+            />
+          }
+        >
+          {projects.map((project, index) => {
+            const userInEntries = project.entries.some(
+              (entry) => entry.competitorId === user.uid
+            );
+
+            if (userInEntries) {
+              return (
+                <CardPost
+                  key={index}
+                  data={project}
+                  theEntries={project.entries}
+                />
+              );
+            }
+            return null;
+          })}
+          <View style={{ height: 150, width: "100%" }}></View>
+        </ScrollView>
 
         <View style={{ height: 150, width: "100%" }}></View>
       </View>

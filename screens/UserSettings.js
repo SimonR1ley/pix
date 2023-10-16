@@ -105,43 +105,75 @@ const UserSettings = ({ navigation }) => {
     <SafeAreaView
       style={{
         display: "flex",
-        justifyContent: "center",
+        // justifyContent: "center",
         flexDirection: "column",
         alignItems: "center",
+        backgroundColor: "#161616",
+        height: "100%",
+        flex: 1,
       }}
     >
       {!loading ? (
         <>
-          <TouchableOpacity
+          <View
             style={{
-              // display: "flex",
-              // justifyContent: "center",
-              // flexDirection: "column",
-              // alignItems: "center",
-              position: "absolute",
-              top: 80,
-              left: 30,
-            }}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={{ fontSize: 17 }}>Back</Text>
-          </TouchableOpacity>
-
-          <Text
-            style={{
-              fontSize: 23,
-              fontWeight: "700",
-              marginBottom: 30,
-              marginTop: 20,
+              width: "100%",
+              height: 80,
+              // backgroundColor: "green",
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              flexDirection: "row",
+              marginBottom: 20,
             }}
           >
-            Settings
-          </Text>
+            <Text
+              style={{
+                fontSize: 24,
+                color: "white",
+                fontWeight: "800",
+                position: "absolute",
+                alignSelf: "center",
+                textAlign: "center",
+                width: "100%",
+                // backgroundColor: "red",
+              }}
+            >
+              {/* My Balence: $1000 */}
+              Settings
+            </Text>
+            {/* <TouchableOpacity
+              style={{
+                marginLeft: 20,
+              }}
+              onPress={() => navigation.goBack()}
+            >
+              <Text style={{ fontSize: 17, color: "white" }}>Back</Text>
+            </TouchableOpacity> */}
+
+            <TouchableOpacity
+              style={{
+                width: 25,
+                height: 25,
+                // backgroundColor: "red",
+                marginLeft: 20,
+                borderRadius: 100,
+              }}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <Image
+                source={require("../assets/return.png")}
+                style={{ width: "100%", height: "100%", borderRadius: 100 }}
+              />
+            </TouchableOpacity>
+          </View>
 
           <TouchableOpacity
             style={{
-              width: 100,
-              height: 100,
+              width: 150,
+              height: 150,
               borderRadius: 100,
               backgroundColor: "black",
             }}
@@ -176,7 +208,7 @@ const UserSettings = ({ navigation }) => {
             <Text
               style={{
                 marginBottom: 10,
-                color: "black",
+                color: "white",
               }}
             >
               Username
@@ -199,7 +231,7 @@ const UserSettings = ({ navigation }) => {
               style={{
                 marginTop: 30,
                 marginBottom: 10,
-                color: "black",
+                color: "white",
               }}
             >
               Email
@@ -220,7 +252,7 @@ const UserSettings = ({ navigation }) => {
 
             <TouchableOpacity
               style={{
-                backgroundColor: "#37B4FB",
+                backgroundColor: "#BBFB05",
                 width: "48%",
                 height: 35,
                 borderRadius: 10,
@@ -230,22 +262,24 @@ const UserSettings = ({ navigation }) => {
               }}
               onPress={updateProfileInformation}
             >
-              <Text style={{ color: "white", fontWeight: "600" }}>Update</Text>
+              <Text style={{ color: "black", fontWeight: "600", fontSize: 18 }}>
+                Update
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={{
-                backgroundColor: "#CC4949",
+                // backgroundColor: "#CC4949",
                 width: "40%",
                 height: 35,
                 borderRadius: 10,
-                marginTop: 20,
+                marginTop: 30,
                 alignItems: "center",
                 justifyContent: "center",
               }}
               onPress={signingOut}
             >
-              <Text style={{ color: "white", fontWeight: "600" }}>
+              <Text style={{ color: "white", fontWeight: "600", fontSize: 17 }}>
                 Sign Out
               </Text>
             </TouchableOpacity>

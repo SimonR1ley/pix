@@ -106,9 +106,9 @@ const Profile = ({ navigation }) => {
 
       <Text
         style={{
-          fontSize: 30,
+          fontSize: 28,
           marginTop: 20,
-          fontWeight: "800",
+          fontWeight: "700",
           color: "white",
         }}
       >
@@ -143,8 +143,8 @@ const Profile = ({ navigation }) => {
       <Text
         style={{
           fontSize: 16,
-          fontWeight: "600",
-          marginTop: 3,
+          // fontWeight: "600",
+          marginTop: 10,
           color: "white",
         }}
       >
@@ -156,38 +156,50 @@ const Profile = ({ navigation }) => {
           width: "100%",
           height: "63%",
           // backgroundColor: "green",
-          marginTop: 20,
-          padding: 5,
+          marginTop: 10,
+          padding: 10,
           paddingTop: 10,
         }}
       >
         {winningInfo.length > 0 ? (
-          winningInfo.map((project, index) => (
-            <View
-              key={index}
-              style={{
-                width: "95%",
-                height: 350,
-                backgroundColor: "grey",
-                borderRadius: 20,
-                alignSelf: "center",
-                marginBottom: 20,
-              }}
-            >
-              <Image
+          <View
+            style={{
+              flexDirection: "row",
+              // justifyContent: "space-evenly",
+              gap: "18%",
+              flexWrap: "wrap",
+            }}
+          >
+            {winningInfo.map((project, index) => (
+              <View
+                key={index}
                 style={{
-                  width: "100%",
-                  height: "100%",
+                  width: "30%", // Set the width to fit 3 items in a row
+                  height: 120,
+                  backgroundColor: "grey",
                   borderRadius: 20,
+                  // marginBottom: 20,
                 }}
-                source={{ uri: project.image }}
-              />
-            </View>
-          ))
+              >
+                <Image
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: 20,
+                  }}
+                  source={{ uri: project.image }}
+                />
+              </View>
+            ))}
+          </View>
         ) : (
-          <Text style={{ alignSelf: "center" }}>
-            You have no Trophes yet. Keep playing!
-          </Text>
+          <>
+            <Text style={{ alignSelf: "center", color: "white" }}>
+              You have no Trophies yet. Keep playing!
+            </Text>
+
+            <Image source={require("../assets/where.gif")} />
+          </>
         )}
         <View style={{ height: 100, width: "100%" }}></View>
       </ScrollView>
