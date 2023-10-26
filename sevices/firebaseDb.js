@@ -216,7 +216,7 @@ export const updateUserFundsInDb = async (uid, funds) => {
   try {
     await updateDoc(doc(db, "users", uid), funds);
   } catch (e) {
-    console.log("Something went wrong with user update");
+    console.log("Something went wrong with funds update", e);
   }
 };
 
@@ -230,4 +230,74 @@ export const makeOffer = async (artworkId, amount) => {
     .catch((error) => {
       console.error("Error updating winnings:", error);
     });
+};
+
+export const updateImageOwner = async (myInfo, userInfo) => {
+  console.log("My Info", myInfo.id);
+  console.log("UpdateImageOwner From DB", userInfo);
+
+  let myFunds = parseInt(myInfo.funds);
+  let offerAmount = parseInt(userInfo.offerAmount);
+
+  let newOwnerFunds = parseInt(userInfo.usersOfferFunds);
+
+  const newOwnerUpdateAmount = newOwnerFunds - offerAmount;
+  const myUpdateAmount = myFunds + offerAmount;
+  console.log(myUpdateAmount);
+
+  await updateUserFundsInDb(myInfo.id, { diamonds: myUpdateAmount });
+
+  try {
+    const updateMarketDoc = updateDoc(doc(db, "market", userInfo.artworkId), {
+      winningUserName: userInfo.username,
+      winningUserId: userInfo.userId,
+    });
+
+    const updateUserFunds1 = updateUserFundsInDb(myInfo.id, {
+      diamonds: myUpdateAmount,
+    });
+    const updateUserFunds2 = updateUserFundsInDb(userInfo.userId, {
+      diamonds: newOwnerUpdateAmount,
+    });
+
+    await Promise.all([updateMarketDoc, updateUserFunds1, updateUserFunds2]);
+
+    await removeOffers(userInfo);
+  } catch (e) {
+    console.log("Something went wrong with user update");
+  }
+
+  // try {
+  //   await updateDoc(doc(db, "market", userInfo.artworkId), {
+  //     winningUserName: userInfo.username,
+  //     winningUserId: userInfo.userId,
+  //   }).then(async () => {
+  //     await updateUserFundsInDb(myInfo.id, myUpdateAmount);
+  //     // .then(async () => {
+  //     //   await updateUserFundsInDb(userInfo.userId, newOwnerUpdateAmount);
+  //     //   // .then(
+  //     //   //   async () => {
+  //     //   //     // await removeOffers(userInfo);
+  //     //   //   }
+  //     //   // );
+  //     // });
+  //     //
+  //   });
+  // } catch (e) {
+  //   console.log("Something went wrong with user update", e);
+  // }
+};
+
+export const removeOffers = async (offers) => {
+  console.log("offer remove Information: ", offers);
+
+  const myDocRef = doc(db, "market", offers.artworkId);
+  try {
+    await updateDoc(myDocRef, {
+      offers: [],
+    });
+    console.log("All offers removed successfully.");
+  } catch (error) {
+    console.error("Error removing offers:", error);
+  }
 };

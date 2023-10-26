@@ -44,7 +44,10 @@ const Market = ({ navigation }) => {
   const [ownerImage, setOwnerImage] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [ownerId, setOwnerId] = useState();
+
   const [offerAmount, setOfferAmount] = useState(0);
+  const [madeOffer, setMadeOffer] = useState("Offer");
 
   const [entered, setEntered] = useState(false);
 
@@ -99,14 +102,22 @@ const Market = ({ navigation }) => {
     getAllUsers();
   }, []);
 
-  const ImageViewName = (name, image, owner, ownerImage, artworkId) => {
+  const ImageViewName = (
+    name,
+    image,
+    owner,
+    ownerImage,
+    artworkId,
+    ownerId
+  ) => {
     setModalVisible(true);
     setImageView(image);
     setArtworkId(artworkId);
     setImageName(name);
     setOwnerName(owner);
     setOwnerImage(ownerImage);
-    console.log("Got id", artworkId);
+    setOwnerId(ownerId);
+    console.log("Got id", ownerId);
   };
 
   const MakeOffer = () => {
@@ -114,6 +125,10 @@ const Market = ({ navigation }) => {
       userId: user.uid,
       username: user.displayName,
       offerAmount: offerAmount,
+      image: imageView,
+      imageName: imageName,
+      artworkId: artworkId,
+      usersOfferFunds: userFunds,
       status: "unacceppted",
     };
 
@@ -384,89 +399,78 @@ const Market = ({ navigation }) => {
                 justifyContent: "center",
               }}
             >
-              <Text style={{ color: "white", fontSize: 24, fontWeight: "800" }}>
-                Buy
-              </Text>
-              {/* <View
-                style={{
-                  width: 220,
-                  height: 45,
-                  backgroundColor: "#2A2D2E",
-                  borderRadius: 15,
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: 20,
-                  marginTop: 20,
-                }}
-              >
-                <Image
-                  source={require("../assets/diamond.png")}
-                  style={{ width: 20, height: 20, marginRight: 10 }}
-                />
-                <Text
-                  style={{ color: "#979797", fontWeight: "700", fontSize: 17 }}
-                >
-                  2200
-                </Text>
-              </View> */}
+              {ownerId != user.uid ? (
+                <>
+                  <Text
+                    style={{ color: "white", fontSize: 24, fontWeight: "800" }}
+                  >
+                    Buy
+                  </Text>
 
-              <View
-                style={{
-                  width: 220,
-                  height: 45,
-                  backgroundColor: "#2A2D2E",
-                  borderRadius: 15,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: 20,
-                  marginTop: 20,
-                  paddingLeft: 20,
-                  paddingRight: 20,
-                }}
-              >
-                <Image
-                  source={require("../assets/diamond.png")}
-                  style={{ width: 20, height: 20, marginRight: 10 }}
-                />
-                <TextInput
-                  style={{
-                    flex: 1, // This allows the TextInput to take up the available space
-                    color: "#979797", // Text color
-                    // backgroundColor: "red",
-                    fontWeight: "600",
-                  }}
-                  placeholder="Your offer"
-                  placeholderTextColor="#979797"
-                  onChangeText={(text) => {
-                    setOfferAmount(text);
-                  }}
-                />
-              </View>
+                  <View
+                    style={{
+                      width: 220,
+                      height: 45,
+                      backgroundColor: "#2A2D2E",
+                      borderRadius: 15,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: 20,
+                      marginTop: 20,
+                      paddingLeft: 20,
+                      paddingRight: 20,
+                    }}
+                  >
+                    <Image
+                      source={require("../assets/diamond.png")}
+                      style={{ width: 20, height: 20, marginRight: 10 }}
+                    />
+                    <TextInput
+                      style={{
+                        flex: 1, // This allows the TextInput to take up the available space
+                        color: "#979797", // Text color
+                        // backgroundColor: "red",
+                        fontWeight: "600",
+                      }}
+                      placeholder="Your offer"
+                      placeholderTextColor="#979797"
+                      onChangeText={(text) => {
+                        setOfferAmount(text);
+                      }}
+                    />
+                  </View>
 
-              <TouchableOpacity
-                style={{
-                  width: 160,
-                  height: 45,
-                  backgroundColor: "#BBFB05",
-                  borderRadius: 15,
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onPress={() => {
-                  MakeOffer();
-                }}
-              >
-                <Text
-                  style={{ color: "black", fontWeight: "700", fontSize: 17 }}
-                >
-                  Offer
-                </Text>
-              </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      width: 160,
+                      height: 45,
+                      backgroundColor: "#BBFB05",
+                      borderRadius: 15,
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    onPress={() => {
+                      setMadeOffer("Offer Sent");
+                      if (madeOffer === "Offer") {
+                        MakeOffer();
+                      }
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "black",
+                        fontWeight: "700",
+                        fontSize: 17,
+                      }}
+                    >
+                      {madeOffer}
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              ) : null}
             </View>
           </View>
         </View>
@@ -475,13 +479,17 @@ const Market = ({ navigation }) => {
       <View style={{ height: "100%" }}>
         <FlatList
           data={projects}
+          contentContainerStyle={{
+            // flexDirection: "row",
+            // flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
           renderItem={({ item, index }) => (
             <View
               style={{
-                // backgroundColor: "red",
-                width: 110,
-                height: 110,
-                margin: 10,
+                width: "30%",
+                aspectRatio: 1,
+                margin: "1.5%",
               }}
             >
               <MarketCard

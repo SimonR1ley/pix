@@ -5,7 +5,7 @@ import TabNavigator from "./TabNavigator";
 import Nav from "./components/Nav";
 
 const AppContainer = () => {
-  const [routeName, setRouteName] = useState("");
+  const [routeName, setRouteName] = useState("Login");
 
   return (
     <NavigationContainer

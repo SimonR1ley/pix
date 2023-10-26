@@ -6,6 +6,9 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  StyleSheet,
+  Modal,
+  Pressable,
 } from "react-native";
 import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,13 +18,21 @@ import { getCurrentUser } from "../sevices/firebaseAuth";
 import {
   getAllProjectsFromMarket,
   getAllUsersFromCollection,
+  removeOffers,
+  updateImageOwner,
 } from "../sevices/firebaseDb";
 
 const Profile = ({ navigation }) => {
   const user = getCurrentUser();
   console.log(user.uid);
-
+  const [modalVisible, setModalVisible] = useState(false);
   const [winningInfo, setWinningInfo] = useState([]);
+  const [imageInfo, setImageInfo] = useState();
+  const [userFunds, setUserFunds] = useState();
+
+  const [selectedOffer, setSelectedOffer] = useState();
+
+  const [offerInfo, setOfferInfo] = useState([]);
 
   const [loading, setLoading] = useState(true);
 
@@ -30,14 +41,25 @@ const Profile = ({ navigation }) => {
     getAllUsers();
   }, []);
 
-  const [userFunds, setUserFunds] = useState();
-
   const getAllUsers = async () => {
     const allUsers = await getAllUsersFromCollection();
 
     const filterd = allUsers.filter((item) => item.id === user.uid);
     setUserFunds(filterd[0].diamonds);
-    console.log("Market Filtered", filterd[0].diamonds);
+    // console.log("Market Filtered", filterd[0].diamonds);
+  };
+
+  const getImageInfo = (imageInfo) => {
+    console.log(imageInfo.offers);
+    setOfferInfo(imageInfo.offers);
+  };
+
+  const changeOwnership = (project) => {
+    const myInfo = {
+      id: user.uid,
+      funds: userFunds,
+    };
+    updateImageOwner(myInfo, project);
   };
 
   // const getAllProjects = async () => {
@@ -77,22 +99,12 @@ const Profile = ({ navigation }) => {
   const getAllProjects = async () => {
     try {
       const marketItems = await getAllProjectsFromMarket();
-      console.log("MarketItems", marketItems);
-      // const theUsers = await getAllUsersFromCollection();
-      // console.log("The Users", theUsers);
-      // const userWinningInfo = theUsers
-      //   .filter(
-      //     (element) => element.winnings && Array.isArray(element.winnings)
-      //   )
-      //   .flatMap((element) =>
-      //     element.winnings.filter((entry) => entry.winningUser === user.uid)
-      //   );
-
+      // console.log("MarketItems", marketItems);
       const userWinningInfo = marketItems.filter(
         (element) => element.winningUserId === user.uid
       );
 
-      console.log("Winning", userWinningInfo);
+      // console.log("Winning", userWinningInfo);
 
       setWinningInfo(userWinningInfo);
       setLoading(false);
@@ -129,6 +141,170 @@ const Profile = ({ navigation }) => {
           backgroundColor: "#161616",
         }}
       >
+        <Modal
+          animationType="none"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(55,55,55,0.7)",
+            }}
+          >
+            <View
+              style={{
+                margin: 20,
+                width: "90%",
+                height: "85%",
+                backgroundColor: "white",
+                borderRadius: 40,
+                padding: 10,
+                alignItems: "center",
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 4,
+                elevation: 5,
+              }}
+            >
+              <Text style={styles.modalText}>Offers</Text>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                {offerInfo.map((project, index) => (
+                  <>
+                    {/* <Text key={index}>{project.username}</Text> */}
+                    <View
+                      key={index}
+                      style={{
+                        width: "98%",
+                        height: 60,
+                        backgroundColor: "white",
+                        marginBottom: 10,
+                        display: "flex",
+                        alignItems: "center",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        padding: 10,
+                        shadowColor: "#000",
+                        borderRadius: 10,
+                        alignSelf: "center",
+                        shadowOffset: {
+                          width: 0,
+                          height: 2,
+                        },
+                        shadowOpacity: 0.25,
+                        shadowRadius: 4,
+                        elevation: 5,
+                      }}
+                    >
+                      <Text style={{ fontSize: 15, fontWeight: "500" }}>
+                        {project.username}
+                      </Text>
+                      <View
+                        style={{
+                          width: "40%",
+                          height: "100%",
+                          // backgroundColor: "green",
+                          display: "flex",
+                          alignItems: "center",
+                          flexDirection: "row",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Image
+                          source={require("../assets/diamond.png")}
+                          style={{ width: 20, height: 20, marginRight: 5 }}
+                        />
+                        <Text style={{ fontSize: 15, fontWeight: "500" }}>
+                          {project.offerAmount}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          width: "30%",
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          flexDirection: "row",
+                          justifyContent: "space-evenly",
+                        }}
+                      >
+                        <TouchableOpacity
+                          style={{
+                            width: 40,
+                            height: 40,
+                            backgroundColor: "rgba(30, 30, 30, 0.1)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: 15,
+                          }}
+                          onPress={() => {
+                            setSelectedOffer(project);
+                            changeOwnership(project);
+                            setModalVisible(false);
+                            // console.log("SelectedOffer", project);
+                          }}
+                        >
+                          <Image
+                            source={require("../assets/like.png")}
+                            style={{ width: 25, height: 25 }}
+                          />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={{
+                            width: 40,
+                            height: 40,
+                            backgroundColor: "rgba(30, 30, 30, 0.1)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: 15,
+                          }}
+                          onPress={() => {
+                            // Collected();
+                            // setModalVisible(!modalVisible);
+                          }}
+                        >
+                          <Image
+                            source={require("../assets/dislike.png")}
+                            style={{ width: 25, height: 25 }}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </>
+                ))}
+              </ScrollView>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => {
+                  // Collected();
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.textStyle}>Close</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+
         <View
           style={{
             width: 100,
@@ -243,8 +419,8 @@ const Profile = ({ navigation }) => {
             >
               {winningInfo.map((project, index) => (
                 <>
-                  {project.offers.length > 0 ? (
-                    <View
+                  {project.offers?.length ? (
+                    <TouchableOpacity
                       key={index}
                       style={{
                         width: "30%", // Set the width to fit 3 items in a row
@@ -253,6 +429,10 @@ const Profile = ({ navigation }) => {
                         borderRadius: 20,
                         // marginBottom: 20,
                         padding: 4,
+                      }}
+                      onPress={() => {
+                        getImageInfo(project);
+                        setModalVisible(true);
                       }}
                     >
                       <Image
@@ -263,7 +443,7 @@ const Profile = ({ navigation }) => {
                         }}
                         source={{ uri: project.image }}
                       />
-                    </View>
+                    </TouchableOpacity>
                   ) : (
                     <View
                       key={index}
@@ -315,5 +495,36 @@ const Profile = ({ navigation }) => {
     );
   }
 };
+const styles = StyleSheet.create({
+  button: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    alignSelf: "center",
+    marginBottom: 10,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+    width: 200,
+    height: 40,
+  },
+  buttonClose: {
+    backgroundColor: "#BBFB05",
+    width: 200,
+    height: 40,
+  },
+  textStyle: {
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginTop: 15,
+    marginBottom: 15,
+    textAlign: "center",
+    fontWeight: "600",
+    fontSize: 23,
+  },
+});
 
 export default Profile;

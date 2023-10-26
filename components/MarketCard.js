@@ -182,7 +182,8 @@ const MarketCard = ({ data, theEntries, imageName }) => {
             data.image,
             data.winningUserName,
             data.winningUserImage,
-            data.id
+            data.id,
+            data.winningUserId
           )
         }
         activeOpacity={0.9}
