@@ -289,7 +289,7 @@ export const updateImageOwner = async (myInfo, userInfo) => {
 };
 
 export const removeOffers = async (offers) => {
-  console.log("offer remove Information: ", offers);
+  console.log("offer remove : ", offers.artworkId);
 
   const myDocRef = doc(db, "market", offers.artworkId);
   try {

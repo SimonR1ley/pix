@@ -453,10 +453,11 @@ const Market = ({ navigation }) => {
                       justifyContent: "center",
                     }}
                     onPress={() => {
-                      setMadeOffer("Offer Sent");
-                      if (madeOffer === "Offer") {
-                        MakeOffer();
-                      }
+                      // setMadeOffer("Offer Sent");
+                      // if (madeOffer === "Offer") {
+                        MakeOffer(); 
+                        setModalVisible(false)
+                      // }
                     }}
                   >
                     <Text

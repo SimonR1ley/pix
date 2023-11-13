@@ -86,22 +86,27 @@ const Competitors = ({ route, navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={{ height: "100%" }}>
+    <SafeAreaView style={{ height: "100%", backgroundColor: "#161616" }}>
       <View
         style={{
-          width: "100%",
-          height: "10%",
-          backgroundColor: "#212121",
+          width: "95%",
+          // height: "10%",
+          padding: 15,
+          // backgroundColor: "#212121",
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
+          borderBottomWidth: .5,
+          borderBottomColor: "white",
+          marginBottom: 10,
+          alignSelf: "center"
         }}
       >
         <TouchableOpacity
           style={{
             height: 50,
             width: 50,
-            backgroundColor: "#212121",
+            // backgroundColor: "#212121",
             position: "absolute",
             left: 15,
             justifyContent: "center",
@@ -111,15 +116,14 @@ const Competitors = ({ route, navigation }) => {
         >
           {/* <Text>Return</Text> */}
           <Image
-            style={{ width: 25, height: 25 }}
+            style={{ width: 20, height: 20 }}
             source={require("../assets/return.png")}
           />
         </TouchableOpacity>
 
         <Text style={{ fontSize: 20, color: "white" }}>
-          {/* {project.imageTitle} */}
+          {data.imageTitle}
         </Text>
-        <Text style={{ color: "white" }}>Owned by: {data.owner}</Text>
       </View>
 
       <ScrollView style={{ paddingTop: 10 }}>
@@ -129,7 +133,7 @@ const Competitors = ({ route, navigation }) => {
             style={{
               width: "95%",
               height: 50,
-              backgroundColor: "#37B4FB",
+              backgroundColor: "#BBFB05",
               alignSelf: "center",
               marginBottom: 10,
               justifyContent: "space-between",
@@ -140,7 +144,7 @@ const Competitors = ({ route, navigation }) => {
               borderRadius: 10,
             }}
           >
-            <Text style={{ fontSize: 18, marginRight: 20, color: "white" }}>
+            <Text style={{ fontSize: 18, marginRight: 20, color: "black" }}>
               {item.name}
             </Text>
             <View
@@ -152,7 +156,7 @@ const Competitors = ({ route, navigation }) => {
                 justifyContent: "center",
               }}
             >
-              <Text style={{ fontSize: 14, fontWeight: "600", color: "white" }}>
+              <Text style={{ fontSize: 14, fontWeight: "600", color: "black" }}>
                 {item.competitorTimeDisplay}
               </Text>
             </View>

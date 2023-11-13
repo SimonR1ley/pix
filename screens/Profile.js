@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Modal,
   Pressable,
+  RefreshControl,
 } from "react-native";
 import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -36,10 +37,14 @@ const Profile = ({ navigation }) => {
 
   const [loading, setLoading] = useState(true);
 
+  const [update, setUpdate] = useState(false)
+
   useEffect(() => {
+    setUpdate(false)
     getAllProjects();
     getAllUsers();
-  }, []);
+    console.log(userFunds);
+  }, [update, modalVisible]);
 
   const getAllUsers = async () => {
     const allUsers = await getAllUsersFromCollection();
@@ -61,40 +66,6 @@ const Profile = ({ navigation }) => {
     };
     updateImageOwner(myInfo, project);
   };
-
-  // const getAllProjects = async () => {
-  //   try {
-  //     const theUsers = await getAllUsersFromCollection();
-
-  //     // console.log(theUsers);
-
-  //     const userWinningInfo = [];
-
-  //     theUsers.forEach((element) => {
-  //       if (element.winnings && Array.isArray(element.winnings)) {
-  //         element.winnings.forEach((entry) => {
-  //           // console.log(
-  //           //   "USER ID " + user.uid + " Winning User: " + entry.winningUser
-  //           // );
-
-  //           // console.log(entry.image);
-  //           if (entry.winningUser === user.uid) {
-  //             // console.log(
-  //             //   "USER ID " + user.uid + " Winning User: " + entry.winningUser
-  //             // );
-  //             userWinningInfo.push(entry);
-  //             // console.log(entry.image);
-  //           }
-  //         });
-  //       }
-  //     });
-
-  //     setWinningInfo(userWinningInfo);
-  //     // console.log(winningInfo); // Now this should log the winningInfo array
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const getAllProjects = async () => {
     try {
@@ -184,6 +155,10 @@ const Profile = ({ navigation }) => {
                   width: "100%",
                   height: "100%",
                 }}
+               
+                refreshControl
+                refreshing={loading}
+                onRefresh={() => setUpdate(true)}
               >
                 {offerInfo.map((project, index) => (
                   <>
@@ -258,6 +233,7 @@ const Profile = ({ navigation }) => {
                             setSelectedOffer(project);
                             changeOwnership(project);
                             setModalVisible(false);
+                            setUpdate(true);
                             // console.log("SelectedOffer", project);
                           }}
                         >
@@ -279,7 +255,10 @@ const Profile = ({ navigation }) => {
                           }}
                           onPress={() => {
                             // Collected();
-                            // setModalVisible(!modalVisible);
+                            setModalVisible(false);
+                            removeOffers(project);
+                            // navigation.replace(Profile)
+                            setUpdate(true);
                           }}
                         >
                           <Image
@@ -407,6 +386,9 @@ const Profile = ({ navigation }) => {
             padding: 10,
             paddingTop: 10,
           }}
+          refreshControl
+          refreshing={loading}
+          onRefresh={() => setUpdate(true)}
         >
           {winningInfo.length > 0 ? (
             <View
